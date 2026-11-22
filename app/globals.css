@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #060a1c;
+  --color-navy-900: #0b1026;
+  --color-navy-800: #141b3d;
+  --color-navy-700: #212a57;
+  --color-navy-600: #323d73;
+  --color-navy-500: #4a5590;
+
+  --color-cream-50: #fffbf4;
+  --color-cream-100: #fff5e6;
+  --color-cream-200: #f6e7cf;
+  --color-cream-300: #ebd5b3;
+
+  --color-sunset-300: #ffb38a;
+  --color-sunset-400: #ff8a5b;
+  --color-sunset-500: #ff6a3d;
+  --color-sunset-600: #e9502a;
+
+  --color-electric-300: #b9a3ff;
+  --color-electric-400: #9877ff;
+  --color-electric-500: #7b4dff;
+  --color-electric-600: #6232f0;
+
+  --color-jungle-300: #7ee0c1;
+  --color-jungle-400: #3fcc9f;
+  --color-jungle-500: #17b890;
+  --color-jungle-600: #0e8f6e;
+
+  --color-sun-400: #ffc93c;
+  --color-ink: #1a1530;
+  --color-muted: #6b6580;
+
+  --radius-4xl: 2rem;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) }
+    50% { transform: translateY(-10px) }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0) }
+    to { transform: translateX(-50%) }
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dmsans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-cream-100);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Subtle film grain for rich story backgrounds */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Leaflet polish */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #0b1026;
+}
+.leaflet-tooltip.tw-tooltip {
+  background: #0b1026;
+  color: #fff5e6;
+  border: 0;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.leaflet-tooltip.tw-tooltip::before {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
