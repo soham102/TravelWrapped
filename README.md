@@ -22,7 +22,7 @@ Data lives in `localStorage` on that device only. A banner makes this explicit.
 1. Create a Supabase project (free tier is fine).
 2. SQL editor → run `supabase/migrations/0001_init.sql` (tables, constraints, RLS, storage bucket + policies, triggers, RPCs), then `0002_api_grants.sql` (table privileges for the API roles — newer Supabase projects no longer grant these automatically).
 3. Auth → URL configuration: set the Site URL and add `https://YOUR-DOMAIN/**` to redirect URLs (used by email confirmation, password reset and Google OAuth).
-4. Optional: Auth → Providers → Google, then set `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true`.
+4. Sign-in is **Google only** in Supabase mode. In Google Cloud Console create an OAuth client (Web application) with the authorized redirect URI `https://YOUR-PROJECT.supabase.co/auth/v1/callback`, then paste its Client ID and secret into Supabase → Authentication → Sign In / Providers → Google. (Local mode, without Supabase, keeps an email/password form for demos.)
 5. Optional: `RESEND_API_KEY` + `INVITE_FROM_EMAIL` (a verified domain) for server-sent invitations.
 6. Optional: `SUPABASE_SERVICE_ROLE_KEY` + `ADMIN_EMAILS` for `/admin` analytics.
 

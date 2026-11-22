@@ -20,6 +20,7 @@
     "jspdf": "^4.2.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.77.0",
+    "mediabunny": "^1.66.2",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",

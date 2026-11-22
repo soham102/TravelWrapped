@@ -20,6 +20,11 @@ export default function ResetPasswordPage() {
   const [busy, setBusy] = React.useState(false);
   const [waited, setWaited] = React.useState(false);
 
+  // With Supabase, sign-in is Google only, so there's no password to reset.
+  React.useEffect(() => {
+    if (store.mode === "supabase") router.replace("/login");
+  }, [store.mode, router]);
+
   // The recovery link signs the user in via the URL; give the client a moment to exchange it.
   React.useEffect(() => {
     const t = setTimeout(() => setWaited(true), 2500);
@@ -43,6 +48,7 @@ export default function ResetPasswordPage() {
     }
   };
 
+  if (store.mode === "supabase") return <PageLoader label="Redirecting to sign in…" />;
   if (loading || (!user && !waited)) return <PageLoader label="Verifying your reset link…" />;
 
   return (

@@ -87,6 +87,8 @@ export default function ProfilePage() {
           </form>
         </Card>
 
+        {/* Google accounts have no password; only local-mode accounts do. */}
+        {store.mode === "local" && (
         <Card>
           <form onSubmit={changePw} className="space-y-4" noValidate>
             <p className="flex items-center gap-2 font-display text-lg font-bold"><KeyRound className="size-5" /> Change password</p>
@@ -96,6 +98,7 @@ export default function ProfilePage() {
             <Button type="submit" variant="outline" loading={pwSaving}>Update password</Button>
           </form>
         </Card>
+        )}
 
         <Card className="space-y-3">
           <p className="flex items-center gap-2 font-display text-lg font-bold"><Database className="size-5" /> Data & privacy</p>

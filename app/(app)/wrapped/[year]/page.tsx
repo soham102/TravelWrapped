@@ -13,6 +13,7 @@ import { AnimateCtx } from "@/components/story/primitives";
 import { SharePanel, usePublicUrl } from "@/components/story/share-panel";
 import { SLIDES } from "@/components/story/slides";
 import { StoryViewer } from "@/components/story/story-viewer";
+import { VideoMaker } from "@/components/story/video-maker";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { EmptyState, PageLoader } from "@/components/ui/misc";
 import { track } from "@/lib/analytics";
@@ -36,7 +37,7 @@ export default function WrappedStudioPage() {
 
   const stats = React.useMemo(() => computeWrapped(trips, year, profile?.full_name ?? null), [trips, year, profile?.full_name]);
   const snapshot = React.useMemo(() => toSnapshot(stats), [stats]);
-  const { stage, download, shareImage, downloadPdf, busy } = useExportStage(stats, `travel-wrapped-${year}`, { collageSeed, collageStyle });
+  const { stage, download, shareImage, downloadPdf, busy, capture } = useExportStage(stats, `travel-wrapped-${year}`, { collageSeed, collageStyle });
   const publicUrl = usePublicUrl(record ?? null);
 
   React.useEffect(() => {
@@ -258,9 +259,6 @@ export default function WrappedStudioPage() {
                   }`}
                 >
                   <span aria-hidden>{c.emoji}</span> {c.label}
-                  {"fresh" in c && c.fresh && (
-                    <span className={`rounded-full px-1.5 py-px text-[9px] font-extrabold uppercase tracking-wide ${active ? "bg-sun-400 text-ink" : "bg-sunset-500 text-white"}`}>new</span>
-                  )}
                 </button>
               );
             })}
@@ -296,6 +294,15 @@ export default function WrappedStudioPage() {
           </div>
           </>
         )}
+      </section>
+
+      {/* Video */}
+      <section className="mt-10">
+        <div className="mb-4">
+          <h2 className="font-display text-2xl font-extrabold">Make it a video 🎬</h2>
+          <p className="text-sm text-muted">Turn your story slides or your trip photos into a Reel with music, cut to the beat. 9:16, ready for Instagram.</p>
+        </div>
+        <VideoMaker s={stats} capture={capture} fileBase={`travel-wrapped-${year}`} shareText={text} />
       </section>
 
       <section className="mt-10 grid gap-5 lg:grid-cols-[1.4fr_1fr]">

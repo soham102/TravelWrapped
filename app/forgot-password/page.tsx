@@ -2,11 +2,13 @@
 
 import { MailCheck } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { AuthLayout } from "@/components/auth-layout";
 import { useAuth } from "@/components/providers";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
+import { PageLoader } from "@/components/ui/misc";
 import { errorMessage, isValidEmail } from "@/lib/utils";
 
 export default function ForgotPasswordPage() {
@@ -15,6 +17,12 @@ export default function ForgotPasswordPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [sent, setSent] = React.useState(false);
+  const router = useRouter();
+
+  // With Supabase, sign-in is Google only, so there's no password to reset.
+  React.useEffect(() => {
+    if (store.mode === "supabase") router.replace("/login");
+  }, [store.mode, router]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +38,8 @@ export default function ForgotPasswordPage() {
       setBusy(false);
     }
   };
+
+  if (store.mode === "supabase") return <PageLoader label="Redirecting to sign in…" />;
 
   return (
     <AuthLayout title="Reset your password" subtitle="We'll email you a secure link to set a new one.">

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
 import { AuthLayout, nextPath } from "@/components/auth-layout";
-import { GoogleButton } from "@/components/google-button";
+import { GoogleSignIn } from "@/components/google-sign-in";
 import { useAuth } from "@/components/providers";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
@@ -42,9 +42,11 @@ export default function LoginPage() {
     }
   };
 
+  // With Supabase, sign-in is Google only. The email form below is for local mode (no Supabase).
+  if (store.mode === "supabase") return <GoogleSignIn variant="login" />;
+
   return (
     <AuthLayout title="Welcome back" subtitle="Log in to keep building your travel story.">
-      <GoogleButton />
       <form onSubmit={submit} className="space-y-4" noValidate>
         <Field label="Email" htmlFor="email">
           <Input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />

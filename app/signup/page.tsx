@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { AuthLayout } from "@/components/auth-layout";
-import { GoogleButton } from "@/components/google-button";
+import { GoogleSignIn } from "@/components/google-sign-in";
 import { REF_KEY, useAuth } from "@/components/providers";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
@@ -58,6 +58,9 @@ export default function SignupPage() {
     }
   };
 
+  // With Supabase, sign-up is Google only. The email form below is for local mode (no Supabase).
+  if (store.mode === "supabase") return <GoogleSignIn variant="signup" />;
+
   if (sentTo)
     return (
       <AuthLayout title="Check your inbox" subtitle="One last step before your travel year begins.">
@@ -79,7 +82,6 @@ export default function SignupPage() {
           🎉 A friend invited you — welcome aboard!
         </p>
       )}
-      <GoogleButton next="/dashboard?welcome=1" />
       <form onSubmit={submit} className="space-y-4" noValidate>
         <Field label="Your name" htmlFor="name" error={errors.name}>
           <Input id="name" autoComplete="name" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} placeholder="Aanya Sharma" aria-invalid={!!errors.name} />

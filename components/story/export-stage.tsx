@@ -118,5 +118,5 @@ export function useExportStage(s: StoryData | null, fileBase: string, opts: { co
     }
   };
 
-  return { stage, download, shareImage, downloadPdf, busy };
+  return { stage, download, shareImage, downloadPdf, busy, capture };
 }

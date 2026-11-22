@@ -24,12 +24,12 @@ export const COLLAGE_STYLES = [
   { key: "stamps", label: "Postage stamps", emoji: "💌", cap: { story: 9, post: 6 } },
   { key: "pop", label: "Pop art", emoji: "💥", cap: { story: 7, post: 5 } },
   { key: "magazine", label: "Magazine cover", emoji: "📰", cap: { story: 4, post: 3 } },
-  { key: "stickers", label: "Sticker pack", emoji: "🦋", cap: { story: 8, post: 5 }, fresh: true },
-  { key: "y2k", label: "Y2K chrome", emoji: "💿", cap: { story: 7, post: 5 }, fresh: true },
-  { key: "receipt", label: "Trip receipt", emoji: "🧾", cap: { story: 6, post: 4 }, fresh: true },
-  { key: "notes", label: "Notes app dump", emoji: "📝", cap: { story: 6, post: 3 }, fresh: true },
-  { key: "desktop", label: "Retro desktop", emoji: "🖥️", cap: { story: 6, post: 4 }, fresh: true },
-  { key: "dualcam", label: "Dual cam", emoji: "🤳", cap: { story: 4, post: 2 }, fresh: true },
+  { key: "stickers", label: "Sticker pack", emoji: "🦋", cap: { story: 8, post: 5 } },
+  { key: "y2k", label: "Y2K chrome", emoji: "💿", cap: { story: 7, post: 5 } },
+  { key: "receipt", label: "Trip receipt", emoji: "🧾", cap: { story: 6, post: 4 } },
+  { key: "notes", label: "Notes app dump", emoji: "📝", cap: { story: 6, post: 3 } },
+  { key: "desktop", label: "Retro desktop", emoji: "🖥️", cap: { story: 6, post: 4 } },
+  { key: "dualcam", label: "Dual cam", emoji: "🤳", cap: { story: 4, post: 2 } },
 ] as const;
 
 export type CollageStyle = (typeof COLLAGE_STYLES)[number]["key"];

@@ -5,7 +5,6 @@ export const SUPABASE_ANON_KEY =
 /** When Supabase isn't configured the app runs fully in "local mode" (data stays in this browser). */
 export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
-export const GOOGLE_AUTH_ENABLED = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
 
 export const DISCLAIMER = "Built by Soham for the goSTOPS Build Sprint. Not an official goSTOPS product.";
 
