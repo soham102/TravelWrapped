@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, DM_Sans, Instrument_Serif } from "next/font/google";
 import { Providers } from "@/components/providers";
+import { VercelAnalytics } from "@/components/vercel-analytics";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({ variable: "--font-bricolage", subsets: ["latin"], display: "swap" });
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) inject attributes on <body> before hydration. Only affects this element's own attributes, not its children. */}
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Providers>{children}</Providers>
+        <VercelAnalytics />
       </body>
     </html>
   );

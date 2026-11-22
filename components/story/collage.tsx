@@ -24,6 +24,12 @@ export const COLLAGE_STYLES = [
   { key: "stamps", label: "Postage stamps", emoji: "💌", cap: { story: 9, post: 6 } },
   { key: "pop", label: "Pop art", emoji: "💥", cap: { story: 7, post: 5 } },
   { key: "magazine", label: "Magazine cover", emoji: "📰", cap: { story: 4, post: 3 } },
+  { key: "stickers", label: "Sticker pack", emoji: "🦋", cap: { story: 8, post: 5 }, fresh: true },
+  { key: "y2k", label: "Y2K chrome", emoji: "💿", cap: { story: 7, post: 5 }, fresh: true },
+  { key: "receipt", label: "Trip receipt", emoji: "🧾", cap: { story: 6, post: 4 }, fresh: true },
+  { key: "notes", label: "Notes app dump", emoji: "📝", cap: { story: 6, post: 3 }, fresh: true },
+  { key: "desktop", label: "Retro desktop", emoji: "🖥️", cap: { story: 6, post: 4 }, fresh: true },
+  { key: "dualcam", label: "Dual cam", emoji: "🤳", cap: { story: 4, post: 2 }, fresh: true },
 ] as const;
 
 export type CollageStyle = (typeof COLLAGE_STYLES)[number]["key"];
@@ -784,6 +790,534 @@ function MagazineCollage({ s, photos, variant, places }: StyleProps) {
   );
 }
 
+/* ───────────────────────── 9. Sticker pack ───────────────────────── */
+
+const GENZ_LINES = [
+  "touch grass ✓",
+  "slay 💅",
+  "it's giving wanderlust",
+  "no thoughts just vibes",
+  "out of office ☀️",
+  "core memory",
+  "understood the assignment",
+  "rent free 🧠",
+  "fr fr",
+  "delulu but booked it",
+];
+const EMOJI_STICKERS = ["🍓", "🌈", "🦋", "⭐", "🍒", "💿", "🫧", "🌸", "🍉", "✌️"];
+const PASTELS = ["#ff8ad0", "#ffe66d", "#7fd8ff", "#fffbf4", "#b69cff", "#9ff0c4"];
+const WHITE_OUTLINE = "2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1.5px 1.5px #fff, -1.5px -1.5px #fff, 1.5px -1.5px #fff, -1.5px 1.5px #fff";
+
+function StickersCollage({ s, photos, variant, rand, places }: StyleProps) {
+  const story = variant === "story";
+  const area = story ? { top: 176, w: 344, h: 396 } : { top: 66, w: 344, h: 286 };
+  const cells = scatter(photos.length, area.w, area.h, colsFor(photos.length, variant), rand, 14, story ? 10 : 6);
+  const shapeOffset = Math.floor(rand() * SHAPES.length);
+  const lineOffset = Math.floor(rand() * GENZ_LINES.length);
+  const H = story ? 640 : 360;
+  const loose = Array.from({ length: story ? 5 : 3 }, (_, i) => ({
+    e: EMOJI_STICKERS[(i * 3 + lineOffset) % EMOJI_STICKERS.length],
+    x: 10 + rand() * 320,
+    y: (story ? 120 : 40) + rand() * (H - (story ? 180 : 60)),
+    rot: (rand() - 0.5) * 50,
+  }));
+  return (
+    <Canvas
+      w={360}
+      h={H}
+      className="text-cream-50"
+      style={{
+        backgroundColor: "#2e8f6c",
+        backgroundImage:
+          "linear-gradient(rgba(255,255,255,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.22) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px)",
+        backgroundSize: "60px 60px, 60px 60px, 12px 12px, 12px 12px",
+      }}
+    >
+      {loose.map((l, i) => (
+        <span key={i} className="absolute text-[26px] leading-none" style={{ left: l.x, top: l.y, transform: `rotate(${l.rot}deg)`, textShadow: WHITE_OUTLINE, filter: "drop-shadow(0 3px 2px rgba(0,0,0,.3))" }}>
+          {l.e}
+        </span>
+      ))}
+      <div className={cn("relative z-10", story ? "px-6 pt-9" : "flex items-center gap-3 px-4 pt-3")} style={{ filter: "drop-shadow(0 4px 3px rgba(0,0,0,.3))" }}>
+        <span className={cn("inline-block -rotate-3 rounded-2xl border-[3px] border-white bg-ink font-display font-extrabold leading-none text-[#ffe66d]", story ? "px-4 py-2 text-[64px]" : "px-2.5 py-1 text-[30px]")}>
+          {s.year}
+        </span>
+        <div className={story ? "mt-3 flex flex-wrap gap-2" : "flex flex-col items-start gap-1"}>
+          <span className={cn("inline-block rotate-3 rounded-full border-[3px] border-white bg-[#ff8ad0] font-extrabold text-ink", story ? "px-3 py-1 text-[15px]" : "px-2 py-0.5 text-[10px]")}>
+            sticker pack ✂︎
+          </span>
+          <span className={cn("inline-block -rotate-2 rounded-full border-[3px] border-white bg-[#7fd8ff] font-extrabold text-ink", story ? "px-3 py-1 text-[15px]" : "px-2 py-0.5 text-[10px]")}>
+            peel &amp; post
+          </span>
+        </div>
+      </div>
+      <div className="absolute left-2" style={{ top: area.top, width: area.w, height: area.h }}>
+        {photos.map((p, i) => {
+          const c = cells[i];
+          const sz = Math.min(c.cw, c.ch, 230) * 0.95;
+          const shape = SHAPES[(i + shapeOffset) % SHAPES.length];
+          const col = PASTELS[(i + lineOffset) % PASTELS.length];
+          return (
+            <div key={p.url + i} style={placed(c, sz, sz, { filter: "drop-shadow(0 5px 4px rgba(0,0,0,.35))", zIndex: i })}>
+              <div className="absolute inset-0 bg-white" style={shape} />
+              <div className="absolute overflow-hidden" style={{ ...shape, inset: 6 }}>
+                <Photo src={p.url} style={{ filter: "saturate(1.2)" }} />
+              </div>
+              {i % 2 === 0 ? (
+                <span
+                  className="absolute bottom-[-8px] left-1/2 whitespace-nowrap rounded-full border-[2.5px] border-white px-2.5 py-1 text-[10px] font-extrabold lowercase leading-none text-ink"
+                  style={{ background: col, transform: `translateX(-50%) rotate(${(rand() - 0.5) * 16}deg)` }}
+                >
+                  {GENZ_LINES[(i / 2 + lineOffset) % GENZ_LINES.length]}
+                </span>
+              ) : (
+                <span className="absolute -right-2 -top-3 text-[28px] leading-none" style={{ textShadow: WHITE_OUTLINE }}>
+                  {EMOJI_STICKERS[(i + lineOffset) % EMOJI_STICKERS.length]}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {story && <Footer s={s} photos={photos} places={places} />}
+    </Canvas>
+  );
+}
+
+/* ───────────────────────── 10. Y2K chrome ───────────────────────── */
+
+const CHROME_TEXT: React.CSSProperties = {
+  backgroundImage: "linear-gradient(180deg, #ffffff 0%, #e3e9f7 28%, #8a94b0 47%, #2e3550 52%, #c7d0e6 72%, #ffffff 100%)",
+  WebkitBackgroundClip: "text",
+  backgroundClip: "text",
+  color: "transparent",
+  filter: "drop-shadow(0 3px 0 #ff4fa8) drop-shadow(0 0 10px rgba(255,255,255,.7))",
+};
+const Y2K_RADII = ["9999px", "36px", "9999px 9999px 24px 24px", "28px 9999px 28px 9999px"];
+const SPARKLES = ["✦", "✧", "⋆", "♡", "✦"];
+
+function Y2kCollage({ s, photos, variant, rand, places }: StyleProps) {
+  const story = variant === "story";
+  const H = story ? 640 : 360;
+  const area = story ? { top: 204, w: 344, h: 376 } : { top: 72, w: 344, h: 280 };
+  const cells = scatter(photos.length, area.w, area.h, colsFor(photos.length, variant), rand, 8, story ? 10 : 6);
+  const sparkles = Array.from({ length: story ? 16 : 10 }, (_, i) => ({
+    ch: SPARKLES[i % SPARKLES.length],
+    x: rand() * 345,
+    y: rand() * (H - 20),
+    size: 10 + rand() * 18,
+  }));
+  return (
+    <Canvas w={360} h={H} className="text-[#5b2a86]" style={{ background: "linear-gradient(160deg, #ffc6ec 0%, #d9c2ff 48%, #b8e6ff 100%)" }}>
+      <div className="absolute -left-16 top-24 size-56 rounded-full bg-white/50 blur-3xl" />
+      <div className="absolute -right-10 bottom-16 size-56 rounded-full bg-[#ff9ad5]/50 blur-3xl" />
+      {sparkles.map((sp, i) => (
+        <span key={i} className="absolute leading-none text-white" style={{ left: sp.x, top: sp.y, fontSize: sp.size, textShadow: "0 0 6px #ff7ac6" }}>
+          {sp.ch}
+        </span>
+      ))}
+      <div className={cn("relative z-10", story ? "px-6 pt-8" : "flex items-center gap-3 px-4 pt-2")}>
+        {story && (
+          <span className="inline-block rounded-full border-2 border-white bg-white/60 px-3 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#ff3fa4]">
+            ✧ the {s.year} era ✧
+          </span>
+        )}
+        <p className={cn("font-display font-extrabold leading-[0.85] tracking-tighter", story ? "mt-1 text-[112px]" : "text-[52px]")} style={CHROME_TEXT}>
+          {s.year}
+        </p>
+        <p className={cn("font-serif italic leading-tight text-[#ff3fa4]", story ? "text-[26px]" : "text-[16px]")}>
+          it&apos;s giving <br className={story ? "hidden" : ""} />main character ♡
+        </p>
+      </div>
+      <div className="absolute left-2" style={{ top: area.top, width: area.w, height: area.h }}>
+        {photos.map((p, i) => {
+          const c = cells[i];
+          const sz = Math.min(c.cw, c.ch, 220) * 0.96;
+          const portrait = i % 3 === 1;
+          const w = portrait ? sz * 0.76 : sz;
+          const radius = Y2K_RADII[i % Y2K_RADII.length];
+          return (
+            <div
+              key={p.url + i}
+              style={placed(c, w, sz, {
+                padding: 4,
+                borderRadius: radius,
+                background: "linear-gradient(135deg, #ff8ad0, #b69cff 50%, #8fe3ff)",
+                boxShadow: "0 0 0 2px #fff, 0 10px 24px rgba(150,70,200,.35)",
+              })}
+            >
+              <div className="relative size-full overflow-hidden border-2 border-white" style={{ borderRadius: radius }}>
+                <Photo src={p.url} style={{ filter: "saturate(1.25) brightness(1.05)" }} />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/35 via-transparent to-transparent" />
+              </div>
+              {i % 2 === 0 && (
+                <span className="absolute bottom-[-9px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-white bg-white/90 px-2 py-0.5 text-[9px] font-extrabold text-[#ff3fa4] shadow">
+                  ★ {p.city}
+                </span>
+              )}
+              {i % 3 === 2 && <span className="absolute -right-2 -top-3 text-[24px] leading-none">🦋</span>}
+            </div>
+          );
+        })}
+      </div>
+      {story && <Footer s={s} photos={photos} places={places} />}
+    </Canvas>
+  );
+}
+
+/* ───────────────────────── 11. Trip receipt ───────────────────────── */
+
+const RECEIPT = "#fdfcf8";
+
+/** Torn-paper edge as a zig-zag polygon (pixel-exact so it exports cleanly). */
+function TornEdge({ w, side }: { w: number; side: "top" | "bottom" }) {
+  const step = 6;
+  const n = Math.ceil(w / step);
+  const pts: string[] = side === "bottom" ? ["0 0", `${w}px 0`] : ["0 100%", `${w}px 100%`];
+  for (let k = n; k >= 0; k--) {
+    const tip = k % 2 === 0;
+    pts.push(`${Math.min(k * step, w)}px ${side === "bottom" ? (tip ? "100%" : "0") : tip ? "0" : "100%"}`);
+  }
+  return <div className="h-[7px]" style={{ width: w, background: RECEIPT, clipPath: `polygon(${pts.join(", ")})` }} />;
+}
+
+function ReceiptCollage({ s, photos, variant, places }: StyleProps) {
+  const story = variant === "story";
+  const W = story ? 264 : 190;
+  const cols = story ? 3 : 2;
+  const ps = (W - 28 - (cols - 1) * 4) / cols;
+  const counts = new Map<string, number>();
+  for (const p of photos) counts.set(p.city, (counts.get(p.city) ?? 0) + 1);
+  const lines = Array.from(counts).slice(0, 5);
+  const row = (l: React.ReactNode, r: React.ReactNode, cls?: string) => (
+    <div className={cn("flex justify-between gap-2", cls)}>
+      <span className="truncate">{l}</span>
+      <span className="shrink-0">{r}</span>
+    </div>
+  );
+  const rule = <div className="my-2 border-t border-dashed border-ink/40" />;
+  return (
+    <Canvas w={360} h={story ? 640 : 360} className="text-ink" style={{ background: "linear-gradient(160deg, #ffd6e8, #c9b8ff 60%, #a8d8ff)" }}>
+      {!story && (
+        <div className="absolute right-3 top-8 w-[140px] text-right">
+          <p className="font-serif text-[22px] italic leading-none text-[#5b2a86]">the receipts</p>
+          <p className="font-display text-[50px] font-extrabold leading-[0.9] tracking-tighter">{s.year}</p>
+          <span className="mt-3 inline-block rotate-6 rounded-full border-2 border-ink bg-ink px-3 py-1 text-[11px] font-extrabold uppercase text-sun-400">paid in full ✓</span>
+          <p className="mt-4 text-[9px] font-bold uppercase tracking-[0.15em] text-ink/60">no refunds on memories</p>
+          <p className="mt-10 text-[8px] font-bold uppercase tracking-[0.15em] text-ink/50">{brandHost()}</p>
+        </div>
+      )}
+      <div
+        className="absolute"
+        style={{ left: story ? 48 : 16, top: story ? 30 : 14, width: W, transform: `rotate(${story ? -1.5 : -2}deg)`, filter: "drop-shadow(0 14px 18px rgba(60,30,90,.3))" }}
+      >
+        <TornEdge w={W} side="top" />
+        <div className="px-[14px] py-2 font-mono uppercase leading-[1.45]" style={{ background: RECEIPT, fontSize: story ? 10 : 8 }}>
+          <p className="text-center font-extrabold" style={{ fontSize: story ? 15 : 11 }}>✈ trip receipt ✈</p>
+          <p className="text-center">order #{s.year}-{String(s.totalTrips).padStart(3, "0")}</p>
+          {story && <p className="text-center">cashier: {s.ownerName}</p>}
+          {rule}
+          <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+            {photos.map((p, i) => (
+              <div key={p.url + i} className="relative overflow-hidden" style={{ height: ps }}>
+                <Photo src={p.url} style={{ filter: "grayscale(1) contrast(1.5) brightness(1.08)" }} />
+              </div>
+            ))}
+          </div>
+          {rule}
+          {story && (
+            <>
+              {lines.map(([city, n]) => row(city, n > 1 ? `x${n} priceless` : "priceless", undefined))}
+              {rule}
+            </>
+          )}
+          {row("trips", s.totalTrips)}
+          {row("days off", s.totalDays)}
+          {row("places", places || s.cities.length)}
+          {row("regrets", "0.00")}
+          {rule}
+          {row("total", "main character", cn("font-extrabold", story ? "text-[13px]" : "text-[10px]"))}
+          {story && (
+            <>
+              {rule}
+              <div
+                className="mx-auto h-[34px] w-[86%]"
+                style={{ backgroundImage: "repeating-linear-gradient(90deg, #1a1530 0 2px, transparent 2px 3px, #1a1530 3px 4px, transparent 4px 7px, #1a1530 7px 10px, transparent 10px 11px)" }}
+              />
+              <p className="mt-1.5 text-center font-extrabold">thank you, come again ✦</p>
+              <p className="text-center text-ink/60">{brandHost()}</p>
+            </>
+          )}
+        </div>
+        <TornEdge w={W} side="bottom" />
+      </div>
+    </Canvas>
+  );
+}
+
+/* ───────────────────────── 12. Notes app dump ───────────────────────── */
+
+const NOTES_AMBER = "#e2a400";
+
+function NotesCollage({ s, photos, variant, places }: StyleProps) {
+  const story = variant === "story";
+  const items = Array.from(new Set([...photos.map((p) => p.city), ...s.cities.map((c) => c.city)])).slice(0, story ? 5 : 4);
+  const check = (city: string) => (
+    <div key={city} className="flex items-center gap-2">
+      <span className="grid shrink-0 place-items-center rounded-full text-white" style={{ background: NOTES_AMBER, width: story ? 16 : 12, height: story ? 16 : 12, fontSize: story ? 10 : 8 }}>
+        ✓
+      </span>
+      <span className="truncate text-ink/55 line-through decoration-ink/40">{city}</span>
+    </div>
+  );
+  const n = photos.length;
+  return (
+    <Canvas w={360} h={story ? 640 : 360} className="bg-[#fffef9] text-ink">
+      <div className={cn("flex items-center justify-between font-semibold", story ? "px-4 pt-5 text-[14px]" : "px-3 pt-2.5 text-[11px]")} style={{ color: NOTES_AMBER }}>
+        <span>‹ Notes</span>
+        <span className="flex items-center gap-3">
+          <span>⤴</span>
+          <span>⋯</span>
+          <span className="font-bold">Done</span>
+        </span>
+      </div>
+      <p className={cn("text-center text-ink/40", story ? "mt-2 text-[10px]" : "mt-0.5 text-[8px]")}>December 31, {s.year} at 11:59 PM</p>
+
+      {story ? (
+        <div className="px-5 pt-2">
+          <p className="text-[27px] font-extrabold leading-tight tracking-tight">{s.year} photo dump 🫶</p>
+          <p className="mt-1 text-[13px] text-ink/70">places i romanticised this year:</p>
+          <div className="mt-2 space-y-1.5 text-[14px]">{items.map(check)}</div>
+          <div className="mt-4 grid gap-1.5" style={{ gridTemplateColumns: n > 1 ? "1fr 1fr" : "1fr", height: 280 }}>
+            {photos.map((p, i) => (
+              <div key={p.url + i} className="relative min-h-0 overflow-hidden rounded-xl" style={n % 2 === 1 && i === 0 && n > 1 ? { gridColumn: "span 2" } : undefined}>
+                <Photo src={p.url} />
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-[13px] text-ink/70">
+            note to self: do it again in {s.year + 1} ✈️ <span className="text-ink/40">#nofilter</span>
+          </p>
+        </div>
+      ) : (
+        <div className="flex gap-3 px-4 pt-1.5">
+          <div className="w-[146px] shrink-0">
+            <p className="text-[19px] font-extrabold leading-tight tracking-tight">{s.year} photo dump 🫶</p>
+            <p className="mt-1 text-[10px] text-ink/70">places i romanticised:</p>
+            <div className="mt-1.5 space-y-1 text-[11px]">{items.map(check)}</div>
+            <p className="mt-3 text-[10px] text-ink/60">note to self: again in {s.year + 1} ✈️</p>
+            <p className="mt-4 text-[8px] font-bold uppercase tracking-[0.15em] text-ink/40">
+              {s.ownerName} · {brandHost()}
+            </p>
+          </div>
+          <div className="grid min-w-0 flex-1 gap-1.5" style={{ height: 290, gridTemplateColumns: n > 1 ? "1fr 1fr" : "1fr", gridTemplateRows: n > 2 ? "1fr 1fr" : "1fr" }}>
+            {photos.map((p, i) => (
+              <div key={p.url + i} className="relative min-h-0 overflow-hidden rounded-xl" style={n === 3 && i === 0 ? { gridRow: "span 2" } : undefined}>
+                <Photo src={p.url} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {story && <Footer s={s} photos={photos} places={places} className="text-ink" />}
+    </Canvas>
+  );
+}
+
+/* ───────────────────────── 13. Retro desktop ───────────────────────── */
+
+const BEVEL: React.CSSProperties = { borderStyle: "solid", borderWidth: 2, borderColor: "#ffffff #404040 #404040 #ffffff" };
+const SUNKEN: React.CSSProperties = { borderStyle: "solid", borderWidth: 2, borderColor: "#808080 #ffffff #ffffff #808080" };
+
+function Win({ title, style, children }: { title: string; style: React.CSSProperties; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col bg-[#c0c0c0] p-[2px] shadow-[4px_4px_0_rgba(0,0,0,.35)]" style={{ ...BEVEL, ...style }}>
+      <div className="flex h-[15px] shrink-0 items-center justify-between gap-1 px-1" style={{ background: "linear-gradient(90deg, #000080, #1084d0)" }}>
+        <span className="truncate font-mono text-[8px] font-bold text-white">{title}</span>
+        <span className="flex gap-[2px]">
+          {["_", "□", "×"].map((c) => (
+            <span key={c} className="grid h-[10px] w-[11px] place-items-center bg-[#c0c0c0] font-mono text-[7px] font-bold leading-none text-black" style={{ ...BEVEL, borderWidth: 1 }}>
+              {c}
+            </span>
+          ))}
+        </span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function DesktopCollage({ s, photos, variant, rand }: StyleProps) {
+  const story = variant === "story";
+  const horizon = story ? 470 : 250;
+  const area = story ? { top: 150, w: 344, h: 320 } : { top: 46, w: 344, h: 260 };
+  const cells = scatter(photos.length, area.w, area.h, colsFor(photos.length, variant), rand, 0, story ? 16 : 10);
+  const sun = story ? 190 : 120;
+  const file = (city: string) => `${city.toLowerCase().replace(/[^a-z0-9]+/g, "_")}.jpg`;
+  return (
+    <Canvas w={360} h={story ? 640 : 360} className="text-white" style={{ background: "linear-gradient(to bottom, #1a0b3d 0%, #5b2a86 45%, #ff6ec7 75%, #ffb38a 100%)" }}>
+      {/* synthwave sun + grid floor */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 rounded-full"
+        style={{ top: horizon - sun * 0.62, width: sun, height: sun, background: "linear-gradient(to bottom, #ffe76a, #ff6ec7 75%)" }}
+      >
+        <div className="absolute inset-x-0 bottom-0 h-1/2 rounded-b-full" style={{ backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 9px, #8a3a9e 9px 12px)" }} />
+      </div>
+      <div className="absolute inset-x-0 bottom-0 overflow-hidden" style={{ top: horizon }}>
+        <div
+          className="absolute -inset-x-1/2 top-0 h-[300%]"
+          style={{
+            backgroundColor: "#2a0f4f",
+            backgroundImage: "linear-gradient(rgba(255,110,199,.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,110,199,.9) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+            transform: "perspective(160px) rotateX(58deg)",
+            transformOrigin: "top",
+          }}
+        />
+      </div>
+
+      <div className={cn("relative z-10", story ? "pt-7 text-center" : "px-3 pt-2")}>
+        <p
+          className={cn("font-display font-extrabold leading-none tracking-tight", story ? "text-[50px]" : "text-[26px]")}
+          style={{ textShadow: story ? "3px 3px 0 #ff6ec7, 6px 6px 0 #5ce1e6" : "2px 2px 0 #ff6ec7, 4px 4px 0 #5ce1e6" }}
+        >
+          {s.year}.exe
+        </p>
+        {story && <p className="mt-2 font-mono text-[10px] text-[#9ff3ff]">C:\MEMORIES\{s.ownerName.toUpperCase().replace(/\s+/g, "_")}</p>}
+        {story && (
+          <div className="mt-3 flex justify-center gap-6 font-mono text-[8px]" style={{ textShadow: "1px 1px 0 #000" }}>
+            {[
+              ["📁", `trips_${String(s.year).slice(2)}`],
+              ["🗑️", "regrets (0)"],
+              ["💾", "memories.zip"],
+            ].map(([icon, label]) => (
+              <div key={label} className="flex flex-col items-center gap-0.5">
+                <span className="text-[22px] leading-none">{icon}</span>
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="absolute left-2 z-10" style={{ top: area.top, width: area.w, height: area.h }}>
+        {photos.map((p, i) => {
+          const c = cells[i];
+          const w = Math.min(c.cw * 1.22, story ? 224 : 178);
+          const h = w * 0.82;
+          return (
+            <Win key={p.url + i} title={file(p.city)} style={{ position: "absolute", left: Math.max(-4, Math.min(c.x - w / 2, area.w - w + 4)), top: c.y - h / 2, width: w, height: h, zIndex: i }}>
+              <div className="relative mt-[2px] min-h-0 flex-1 overflow-hidden" style={SUNKEN}>
+                <Photo src={p.url} style={{ filter: "saturate(1.15) contrast(1.05)" }} />
+              </div>
+            </Win>
+          );
+        })}
+      </div>
+
+      {story && (
+        <Win title="trip.exe" style={{ position: "absolute", left: 62, top: 498, width: 236, zIndex: 20 }}>
+          <div className="flex items-center gap-2 px-2 pb-1 pt-2 font-mono text-[9px] leading-snug text-black">
+            <span className="text-[20px] leading-none">⚠️</span>
+            <span>Are you sure you want to go back to normal life?</span>
+          </div>
+          <div className="flex justify-center gap-2 pb-2">
+            {["No", "Absolutely not"].map((b) => (
+              <span key={b} className="bg-[#c0c0c0] px-2.5 py-0.5 font-mono text-[8px] font-bold text-black" style={BEVEL}>
+                {b}
+              </span>
+            ))}
+          </div>
+        </Win>
+      )}
+
+      {/* taskbar */}
+      <div className="absolute inset-x-0 bottom-0 z-30 flex items-center gap-1.5 bg-[#c0c0c0] px-1 text-black" style={{ height: story ? 28 : 22, borderTop: "2px solid #fff" }}>
+        <span className="bg-[#c0c0c0] px-1.5 font-mono text-[10px] font-extrabold" style={BEVEL}>
+          ✈ Start
+        </span>
+        <span className="truncate px-1.5 font-mono text-[9px]" style={{ ...SUNKEN, maxWidth: 150 }}>
+          {s.ownerName}&apos;s {s.year}
+        </span>
+        <span className="ml-auto px-1.5 font-mono text-[8px]" style={SUNKEN}>
+          {brandHost()} · 23:59
+        </span>
+      </div>
+    </Canvas>
+  );
+}
+
+/* ───────────────────────── 14. Dual cam ───────────────────────── */
+
+function DualCamPost({ s, main, inset, w, h, compact }: { s: StoryData; main: GalleryPhoto; inset?: GalleryPhoto; w: number; h: number; compact: boolean }) {
+  const initial = (s.ownerName || "T").trim()[0]?.toUpperCase() ?? "T";
+  return (
+    <div style={{ width: w }}>
+      <div className={cn("flex items-center gap-2", compact ? "mb-1.5" : "mb-2")}>
+        <span
+          className="grid shrink-0 place-items-center rounded-full bg-gradient-to-br from-sunset-400 to-electric-500 font-display font-bold text-white"
+          style={{ width: compact ? 22 : 28, height: compact ? 22 : 28, fontSize: compact ? 10 : 12 }}
+        >
+          {initial}
+        </span>
+        <div className="min-w-0">
+          <p className={cn("truncate font-bold leading-tight", compact ? "text-[10px]" : "text-[12px]")}>{s.ownerName}</p>
+          <p className={cn("truncate leading-tight text-white/55", compact ? "text-[8px]" : "text-[9px]")}>
+            📍 {main.city} · {shortDate(main.date)}
+          </p>
+        </div>
+        <span className={cn("ml-auto shrink-0 text-white/45", compact ? "text-[8px]" : "text-[9px]")}>⏰ 2h late</span>
+      </div>
+      <div className="relative overflow-hidden rounded-[18px] bg-neutral-800" style={{ height: h }}>
+        <Photo src={main.url} />
+        {inset && (
+          <div
+            className="absolute left-2.5 top-2.5 overflow-hidden rounded-[12px] border-2 border-black shadow-lg"
+            style={{ width: compact ? 66 : 84, height: (compact ? 66 : 84) * 1.3 }}
+          >
+            <Photo src={inset.url} />
+          </div>
+        )}
+      </div>
+      <div className={cn("flex items-center text-white/50", compact ? "mt-1 text-[8px]" : "mt-1.5 text-[10px]")}>
+        <span>💬 add a comment…</span>
+        <span className="ml-auto tracking-widest">😍🔥😭</span>
+      </div>
+    </div>
+  );
+}
+
+function DualCamCollage({ s, photos, variant, places }: StyleProps) {
+  const story = variant === "story";
+  const pairs: { main: GalleryPhoto; inset?: GalleryPhoto }[] = [];
+  for (let i = 0; i < photos.length; i += 2) pairs.push({ main: photos[i], inset: photos[i + 1] });
+  const shown = pairs.slice(0, story ? 2 : 1);
+  return (
+    <Canvas w={360} h={story ? 640 : 360} className="bg-[#050505] text-white">
+      <div className={cn("text-center", story ? "pt-6" : "pt-2")}>
+        <p className={cn("font-display font-extrabold tracking-tight", story ? "text-[22px]" : "text-[15px]")}>Wrapped.</p>
+        {story && (
+          <span className="mt-1 inline-block rounded-full bg-white/10 px-3 py-1 text-[9px] font-bold">⚡ time to be real: your {s.year} recap ⚡</span>
+        )}
+      </div>
+      <div className={cn("flex flex-col items-center", story ? "mt-4 gap-5" : "mt-1.5")}>
+        {shown.map((pr, i) => (
+          <DualCamPost
+            key={pr.main.url + i}
+            s={s}
+            main={pr.main}
+            inset={pr.inset}
+            w={story ? 328 : 336}
+            h={story ? (shown.length === 1 ? 380 : 180) : 262}
+            compact={!story}
+          />
+        ))}
+      </div>
+      {story && <Footer s={s} photos={photos} places={places} className="bottom-4" />}
+    </Canvas>
+  );
+}
+
 /* ───────────────────────── entry ───────────────────────── */
 
 function EmptyCollage({ variant }: { variant: CollageVariant }) {
@@ -806,6 +1340,12 @@ const RENDERERS: Record<CollageStyle, (p: StyleProps) => React.ReactNode> = {
   stamps: StampsCollage,
   pop: PopCollage,
   magazine: MagazineCollage,
+  stickers: StickersCollage,
+  y2k: Y2kCollage,
+  receipt: ReceiptCollage,
+  notes: NotesCollage,
+  desktop: DesktopCollage,
+  dualcam: DualCamCollage,
 };
 
 export function PhotoCollage({

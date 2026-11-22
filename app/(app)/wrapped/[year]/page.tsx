@@ -258,6 +258,9 @@ export default function WrappedStudioPage() {
                   }`}
                 >
                   <span aria-hidden>{c.emoji}</span> {c.label}
+                  {"fresh" in c && c.fresh && (
+                    <span className={`rounded-full px-1.5 py-px text-[9px] font-extrabold uppercase tracking-wide ${active ? "bg-sun-400 text-ink" : "bg-sunset-500 text-white"}`}>new</span>
+                  )}
                 </button>
               );
             })}
