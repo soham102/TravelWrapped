@@ -282,7 +282,8 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
         </Field>
       </Card>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-navy-900/10 bg-cream-50/90 px-4 py-3 backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+      {/* Mobile: floats just above the app's fixed bottom nav (bottom-3 + ~64px tall), which would otherwise cover it. */}
+      <div className="fixed inset-x-3 bottom-[5.25rem] z-30 rounded-2xl border border-navy-900/10 bg-cream-50/90 p-2 shadow-lg backdrop-blur sm:static sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none">
         <div className="mx-auto flex max-w-2xl items-center gap-3">
           <div className="hidden flex-1 text-sm text-muted sm:block">
             <MapPin className="mr-1 inline size-4" />
