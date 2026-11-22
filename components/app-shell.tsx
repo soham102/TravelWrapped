@@ -23,8 +23,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   React.useEffect(() => {
-    if (!loading && !user) router.replace(`/login?next=${encodeURIComponent(pathname)}`);
-  }, [loading, user, pathname, router]);
+    if (loading || user) return;
+    let cancelled = false;
+    void (async () => {
+      // If this page was the OAuth return (e.g. /dashboard?code=…) and no session came of it, carry the
+      // reason to /login instead of silently showing the sign-in button again.
+      const query = new URLSearchParams(window.location.search);
+      let reason = (await store.authCallbackError?.().catch(() => null)) ?? null;
+      if (!reason && query.has("code")) {
+        reason = `the sign-in returned to ${window.location.origin} but this browser has no pending sign-in for it (it may have started on a different web address)`;
+      }
+      if (cancelled) return;
+      const q = new URLSearchParams({ next: pathname });
+      if (reason) q.set("error_description", reason);
+      router.replace(`/login?${q}`);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, user, pathname, router, store]);
 
   if (loading || !user) return <PageLoader label={loading ? "Loading…" : "Redirecting to login…"} />;
 

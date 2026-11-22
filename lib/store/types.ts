@@ -27,6 +27,8 @@ export interface Store {
   signUp(email: string, password: string, fullName: string): Promise<{ needsConfirmation: boolean }>;
   signIn(email: string, password: string): Promise<void>;
   signInWithGoogle(next?: string): Promise<void>;
+  /** Why the OAuth redirect this page loaded with couldn't become a session (null if it worked or there wasn't one). */
+  authCallbackError?(): Promise<string | null>;
   sendPasswordReset(email: string): Promise<void>;
   updatePassword(password: string): Promise<void>;
   signOut(): Promise<void>;

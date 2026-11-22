@@ -74,6 +74,12 @@ export class SupabaseStore implements Store {
     fail(error);
   }
 
+  async authCallbackError() {
+    // initialize() is cached: it returns the result of the one-time URL detection (code exchange or error params).
+    const { error } = await this.sb.auth.initialize();
+    return error ? error.message : null;
+  }
+
   async sendPasswordReset(email: string) {
     const { error } = await this.sb.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
