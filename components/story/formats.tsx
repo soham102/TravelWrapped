@@ -109,7 +109,7 @@ export function TimelinePoster({ s }: { s: StoryData }) {
                   <p className="font-display text-xl font-extrabold leading-none">{d.getDate()}</p>
                   <p className="text-[9px] font-bold uppercase text-sunset-600">{MONTH_NAMES[d.getMonth()]}</p>
                 </div>
-                <div className="relative flex min-w-0 flex-1 gap-2 border-l-2 pl-3" style={{ borderColor: ["#ff6a3d", "#7b4dff", "#17b890"][i % 3] }}>
+                <div className="relative flex min-w-0 flex-1 gap-2 border-l-2 pl-3" style={{ borderColor: ["#ff3366", "#7c3aed", "#2fb3ad"][i % 3] }}>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-extrabold leading-tight">{t.name}</p>
                     <p className="truncate text-[10px] font-medium text-muted">

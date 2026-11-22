@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Download, Play } from "lucide-react";
+import { ArrowRight, Download, Map as MapIcon, Play } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import { Logo, SiteFooter } from "@/components/brand";
@@ -16,7 +16,7 @@ import { statsToPoints } from "@/lib/hooks";
 import { plural } from "@/lib/utils";
 import { shareLine } from "@/lib/wrapped/compute";
 
-export function PublicWrapped({ s, mode, viewKey }: { s: StoryData; mode: "public" | "demo"; viewKey: string }) {
+export function PublicWrapped({ s, mode, viewKey, journeyHref }: { s: StoryData; mode: "public" | "demo"; viewKey: string; journeyHref?: string }) {
   const [viewer, setViewer] = React.useState(false);
   const { stage, download, busy } = useExportStage(s, mode === "demo" ? "travel-wrapped-sample" : `travel-wrapped-${s.ownerName.toLowerCase()}`);
 
@@ -63,6 +63,11 @@ export function PublicWrapped({ s, mode, viewKey }: { s: StoryData; mode: "publi
               <Button size="lg" onClick={() => setViewer(true)}>
                 <Play /> Watch the story
               </Button>
+              {journeyHref && (
+                <Link href={journeyHref} className={buttonVariants({ size: "lg", variant: "electric" })}>
+                  <MapIcon /> Watch the journey
+                </Link>
+              )}
               <Link href="/signup" className={buttonVariants({ size: "lg", variant: "glass" })}>
                 Make my own <ArrowRight />
               </Link>

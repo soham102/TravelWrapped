@@ -42,7 +42,7 @@ export function IntroSlide({ s }: SlideProps) {
         <R delay={0.25} y={30}>
           <p
             className="font-display text-[132px] font-extrabold leading-[0.85] tracking-tighter"
-            style={{ backgroundImage: "linear-gradient(120deg,#ffc93c,#ff6a3d 45%,#b9a3ff)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}
+            style={{ backgroundImage: "linear-gradient(120deg,#ffcc00,#ff3366 45%,#c5a3ff)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}
           >
             {s.year}
           </p>
@@ -94,7 +94,7 @@ export function NumbersSlide({ s }: SlideProps) {
   return (
     <Canvas className="grain bg-sunset-500 text-cream-50">
       <svg className="absolute inset-0" viewBox="0 0 360 640" aria-hidden>
-        <path d="M-20 560 C 80 470, 40 330, 180 300 S 330 140, 390 60" stroke="#fff5e6" strokeOpacity="0.35" strokeWidth="2.5" strokeDasharray="6 8" fill="none" />
+        <path d="M-20 560 C 80 470, 40 330, 180 300 S 330 140, 390 60" stroke="#faf7f3" strokeOpacity="0.35" strokeWidth="2.5" strokeDasharray="6 8" fill="none" />
       </svg>
       <SlideBrand year={s.year} />
       <div className="relative z-10 flex h-full flex-col px-6 pb-12 pt-20">
@@ -222,8 +222,8 @@ export function TimelineSlide({ s }: SlideProps) {
             {items.map((t, i) => (
               <R key={t.id} delay={0.15 + i * 0.1} x={-20} y={0} className="flex items-center gap-3">
                 <span className="w-[30px] text-right text-[11px] font-extrabold uppercase text-muted">{MONTH_NAMES[parseDate(t.start).getMonth()]}</span>
-                <span className="relative z-10 size-[14px] shrink-0 rounded-full border-[3px] border-cream-100" style={{ background: ["#ff6a3d", "#7b4dff", "#17b890", "#ffc93c", "#0b1026"][i % 5] }} />
-                <div className="min-w-0 flex-1 rounded-2xl bg-white px-3 py-2 shadow-[0_1px_0_rgba(11,16,38,0.06)]">
+                <span className="relative z-10 size-[14px] shrink-0 rounded-full border-[3px] border-cream-100" style={{ background: ["#ff3366", "#7c3aed", "#2fb3ad", "#ffcc00", "#1c0f38"][i % 5] }} />
+                <div className="min-w-0 flex-1 rounded-2xl bg-white px-3 py-2 shadow-[0_1px_0_rgba(28,15,56,0.06)]">
                   <p className="truncate text-[13px] font-bold leading-tight">{t.name}</p>
                   <p className="truncate text-[11px] text-muted">
                     {fmtRange(t.start, t.end)} · {t.cities.slice(0, 3).join(" → ")}
@@ -298,7 +298,7 @@ export function PersonalitySlide({ s }: SlideProps) {
   const p = s.personality;
   const Icon = PERSONALITY_ICONS[p.key] ?? Sparkles;
   return (
-    <Canvas className="grain text-cream-50" style={{ background: "linear-gradient(160deg,#6232f0 0%,#7b4dff 35%,#ff6a3d 100%)" }}>
+    <Canvas className="grain text-cream-50" style={{ background: "linear-gradient(160deg,#6d28d9 0%,#7c3aed 35%,#ff3366 100%)" }}>
       <SlideBrand year={s.year} />
       <div className="relative z-10 flex h-full flex-col items-center px-6 pb-12 pt-20 text-center">
         <R delay={0.05}>
@@ -358,7 +358,7 @@ export function HighlightsSlide({ s }: SlideProps) {
         ) : quotes.length === 0 ? (
           <div className="mt-6 grid grid-cols-2 gap-2.5">
             {postcards.map((c, i) => (
-              <R key={c.city} delay={0.2 + i * 0.12} scale={0.85} className="overflow-hidden rounded-2xl" style={{ background: ["#ff6a3d", "#7b4dff", "#17b890", "#ffc93c"][i % 4] }}>
+              <R key={c.city} delay={0.2 + i * 0.12} scale={0.85} className="overflow-hidden rounded-2xl" style={{ background: ["#ff3366", "#7c3aed", "#2fb3ad", "#ffcc00"][i % 4] }}>
                 <Scene kind={sceneFor(c.tags)} className="h-24 w-full" />
                 <p className="px-3 pb-3 pt-1 font-display text-lg font-extrabold leading-tight text-navy-900">{c.city}</p>
               </R>
@@ -400,7 +400,7 @@ export function AchievementsSlide({ s }: SlideProps) {
         <div className="mt-6 grid flex-1 grid-cols-2 content-start gap-2.5">
           {list.map((a, i) => {
             const Icon = ACHIEVEMENT_ICONS[a.icon] ?? Sparkles;
-            const bg = ["#ff6a3d", "#7b4dff", "#17b890", "#ffc93c", "#ff8a5b", "#9877ff"][i % 6];
+            const bg = ["#ff3366", "#7c3aed", "#2fb3ad", "#ffcc00", "#ff5c85", "#9557ff"][i % 6];
             return (
               <R key={a.key} delay={0.15 + i * 0.1} scale={0.7} className="flex flex-col rounded-3xl bg-white/[0.06] p-3.5">
                 <span className="grid size-10 place-items-center rounded-2xl" style={{ background: bg }}>

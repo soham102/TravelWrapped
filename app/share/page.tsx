@@ -10,9 +10,11 @@ import type { WrappedSnapshot } from "@/lib/types";
 /** Local-mode public link: the public-safe snapshot is encoded in the URL hash (never sent to a server). */
 export default function LocalSharePage() {
   const [s, setS] = React.useState<WrappedSnapshot | null | undefined>(undefined);
+  const [hash, setHash] = React.useState("");
 
   React.useEffect(() => {
     const token = window.location.hash.slice(1);
+    setHash(window.location.hash);
     if (!token) return setS(null);
     decodeSnapshot(token).then(
       (snap) => setS(snap && snap.personality && Array.isArray(snap.cities) ? { ...snap, highlights: [] } : null),
@@ -28,5 +30,5 @@ export default function LocalSharePage() {
         <Link href="/" className="rounded-full bg-sunset-500 px-6 py-3 font-semibold text-white">Create your own Travel Wrapped</Link>
       </div>
     );
-  return <PublicWrapped s={s} mode="public" viewKey="local" />;
+  return <PublicWrapped s={s} mode="public" viewKey="local" journeyHref={`/share/journey${hash}`} />;
 }

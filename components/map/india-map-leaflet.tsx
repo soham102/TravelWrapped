@@ -23,7 +23,7 @@ import { TRIP_COLORS } from "@/lib/colors";
  * If it really is torn down (unmount or hidden route), the context is cleared so children unmount
  * first and a fresh map is created when the component comes back.
  */
-function StableMapContainer({
+export function StableMapContainer({
   center,
   zoom,
   className,
@@ -65,6 +65,12 @@ function StableMapContainer({
   );
 }
 
+/** Keyless Esri dark-gray basemap by default; override with NEXT_PUBLIC_MAP_TILES_URL (+ _ATTRIBUTION). */
+export const TILE_URL =
+  process.env.NEXT_PUBLIC_MAP_TILES_URL || "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}";
+export const TILE_ATTRIBUTION =
+  process.env.NEXT_PUBLIC_MAP_TILES_ATTRIBUTION || "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors";
+
 export default function IndiaLeafletMap({ trips, visitedStates }: { trips: Trip[]; visitedStates: string[] }) {
   const visited = React.useMemo(() => new Set(visitedStates), [visitedStates]);
   const geoKey = visitedStates.join("|"); // remount GeoJSON when highlight set changes
@@ -72,9 +78,9 @@ export default function IndiaLeafletMap({ trips, visitedStates }: { trips: Trip[
   const style = (feature?: { properties?: { ST_NM?: string } }): PathOptions => {
     const v = visited.has(feature?.properties?.ST_NM ?? "");
     return {
-      color: v ? "#ffb38a" : "#4a5590",
+      color: v ? "#ff9ab3" : "#6e56a8",
       weight: v ? 1.4 : 0.7,
-      fillColor: v ? "#ff6a3d" : "#1b2350",
+      fillColor: v ? "#ff3366" : "#2a1650",
       fillOpacity: v ? 0.45 : 0.15,
     };
   };
@@ -91,12 +97,7 @@ export default function IndiaLeafletMap({ trips, visitedStates }: { trips: Trip[
       className="h-full w-full"
       attributionControl
     >
-      {/* Keyless Esri dark-gray basemap by default; override with NEXT_PUBLIC_MAP_TILES_URL (+ _ATTRIBUTION). */}
-      <TileLayer
-        attribution={process.env.NEXT_PUBLIC_MAP_TILES_ATTRIBUTION || "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors"}
-        url={process.env.NEXT_PUBLIC_MAP_TILES_URL || "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"}
-        maxNativeZoom={16}
-      />
+      <TileLayer attribution={TILE_ATTRIBUTION} url={TILE_URL} maxNativeZoom={16} />
       <GeoJSON
         key={geoKey}
         data={INDIA_GEO}
@@ -119,7 +120,7 @@ export default function IndiaLeafletMap({ trips, visitedStates }: { trips: Trip[
                 key={d.id}
                 center={[d.latitude!, d.longitude!]}
                 radius={8}
-                pathOptions={{ color: "#0b1026", weight: 2.5, fillColor: color, fillOpacity: 1 }}
+                pathOptions={{ color: "#1c0f38", weight: 2.5, fillColor: color, fillOpacity: 1 }}
               >
                 <Tooltip direction="top" offset={[0, -8]} className="tw-tooltip">
                   {d.city}
@@ -127,11 +128,11 @@ export default function IndiaLeafletMap({ trips, visitedStates }: { trips: Trip[
                 <Popup>
                   <div style={{ fontFamily: "var(--font-sans)" }}>
                     <p style={{ margin: 0, fontWeight: 800, fontSize: 14 }}>{d.city}</p>
-                    <p style={{ margin: "2px 0 0", color: "#6b6580" }}>{[d.state, d.country].filter(Boolean).join(", ")}</p>
+                    <p style={{ margin: "2px 0 0", color: "#636162" }}>{[d.state, d.country].filter(Boolean).join(", ")}</p>
                     <p style={{ margin: "6px 0 0", fontWeight: 600 }}>
                       {t.trip_name} · stop {i + 1}/{coords.length}
                     </p>
-                    <p style={{ margin: 0, color: "#6b6580" }}>{fmtRange(t.start_date, t.end_date)}</p>
+                    <p style={{ margin: 0, color: "#636162" }}>{fmtRange(t.start_date, t.end_date)}</p>
                   </div>
                 </Popup>
               </CircleMarker>

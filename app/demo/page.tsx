@@ -7,5 +7,5 @@ import { sampleTrips } from "@/lib/wrapped/sample";
 
 export default function DemoPage() {
   const s = React.useMemo(() => computeWrapped(sampleTrips(2026), 2026, "Aanya"), []);
-  return <PublicWrapped s={s} mode="demo" viewKey="demo" />;
+  return <PublicWrapped s={s} mode="demo" viewKey="demo" journeyHref="/demo/journey" />;
 }

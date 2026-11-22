@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
+import { JourneyEntryCard } from "@/components/journey/journey-entry-card";
 import { useAuth } from "@/components/providers";
 import { COLLAGE_FORMATS, COLLAGE_STYLES, type CollageStyle, collageCap, PhotoCollage } from "@/components/story/collage";
 import { useExportStage } from "@/components/story/export-stage";
@@ -18,6 +19,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { EmptyState, PageLoader } from "@/components/ui/misc";
 import { track } from "@/lib/analytics";
 import { useTrips } from "@/lib/hooks";
+import { buildJourney } from "@/lib/journey/build";
 import type { WrappedRecord } from "@/lib/types";
 import { errorMessage, plural, stableStringify } from "@/lib/utils";
 import { computeWrapped, shareLine, toSnapshot } from "@/lib/wrapped/compute";
@@ -37,6 +39,7 @@ export default function WrappedStudioPage() {
 
   const stats = React.useMemo(() => computeWrapped(trips, year, profile?.full_name ?? null), [trips, year, profile?.full_name]);
   const snapshot = React.useMemo(() => toSnapshot(stats), [stats]);
+  const journey = React.useMemo(() => buildJourney(trips, year, profile?.full_name ?? null), [trips, year, profile?.full_name]);
   const { stage, download, shareImage, downloadPdf, busy, capture } = useExportStage(stats, `travel-wrapped-${year}`, { collageSeed, collageStyle });
   const publicUrl = usePublicUrl(record ?? null);
 
@@ -147,6 +150,9 @@ export default function WrappedStudioPage() {
           </button>
         </div>
       </div>
+
+      {/* Animated travel journey */}
+      {journey.stops.length > 0 && <JourneyEntryCard href={`/journey/${year}`} journey={journey} className="mt-6" />}
 
       {/* Story slides */}
       <section className="mt-10">

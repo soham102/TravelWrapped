@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/app-shell";
+import { JourneyEntryCard } from "@/components/journey/journey-entry-card";
 import { IndiaMapSvg } from "@/components/map/india-map-svg";
 import { useAuth } from "@/components/providers";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge, Card, EmptyState, PageLoader, StatTile } from "@/components/ui/misc";
 import { track } from "@/lib/analytics";
 import { statsToPoints, useTrips } from "@/lib/hooks";
+import { buildJourney } from "@/lib/journey/build";
 import type { Invitation, WrappedRecord } from "@/lib/types";
 import { cn, errorMessage, firstName, fmtRange, plural } from "@/lib/utils";
 import { availableYears, computeWrapped } from "@/lib/wrapped/compute";
@@ -37,6 +39,7 @@ export default function DashboardPage() {
   const year = years.includes(thisYear) ? thisYear : years[0] ?? thisYear;
   const stats = React.useMemo(() => computeWrapped(trips, year, profile?.full_name ?? null), [trips, year, profile?.full_name]);
   const record = wrapped.find((w) => w.year === year);
+  const journey = React.useMemo(() => buildJourney(trips, year, profile?.full_name ?? null), [trips, year, profile?.full_name]);
 
   const importSample = async () => {
     setImporting(true);
@@ -79,6 +82,9 @@ export default function DashboardPage() {
                 </Button>
               </div>
               <p className="mt-3 text-xs text-cream-200/60">Sample trips are labelled and easy to delete.</p>
+              <Link href="/demo/journey" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-sunset-400 hover:underline">
+                ▶ Watch a sample travel journey <ArrowRight className="size-4" />
+              </Link>
             </div>
             <IndiaMapSvg width={300} height={340} theme="night" animate className="mx-auto w-full max-w-[260px]" />
           </div>
@@ -134,9 +140,11 @@ export default function DashboardPage() {
         />
       </div>
 
+      {journey.stops.length > 0 && <JourneyEntryCard href={`/journey/${year}`} journey={journey} compact className="mt-6" />}
+
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {/* Wrapped hero */}
-        <Link href={`/wrapped/${year}`} className="grain group relative overflow-hidden rounded-[28px] p-6 text-cream-50 lg:col-span-2" style={{ background: "linear-gradient(135deg,#6232f0,#7b4dff 40%,#ff6a3d)" }}>
+        <Link href={`/wrapped/${year}`} className="grain group relative overflow-hidden rounded-[28px] p-6 text-cream-50 lg:col-span-2" style={{ background: "linear-gradient(135deg,#6d28d9,#7c3aed 40%,#ff3366)" }}>
           <div className="relative z-10 flex h-full flex-col">
             <Badge className="w-fit bg-white/20 text-cream-50">My Travel Wrapped</Badge>
             <p className="mt-4 font-display text-4xl font-extrabold leading-none sm:text-5xl">{year}</p>

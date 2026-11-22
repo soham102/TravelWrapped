@@ -1,36 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy-950: #060a1c;
-  --color-navy-900: #0b1026;
-  --color-navy-800: #141b3d;
-  --color-navy-700: #212a57;
-  --color-navy-600: #323d73;
-  --color-navy-500: #4a5590;
+  --color-navy-950: #0b0514;
+  --color-navy-900: #1c0f38;
+  --color-navy-800: #2a1650;
+  --color-navy-700: #341864;
+  --color-navy-600: #4b2d85;
+  --color-navy-500: #6e56a8;
 
-  --color-cream-50: #fffbf4;
-  --color-cream-100: #fff5e6;
-  --color-cream-200: #f6e7cf;
-  --color-cream-300: #ebd5b3;
+  --color-cream-50: #fffafb;
+  --color-cream-100: #faf7f3;
+  --color-cream-200: #f2ebfd;
+  --color-cream-300: #e4dcf5;
 
-  --color-sunset-300: #ffb38a;
-  --color-sunset-400: #ff8a5b;
-  --color-sunset-500: #ff6a3d;
-  --color-sunset-600: #e9502a;
+  --color-sunset-300: #ff9ab3;
+  --color-sunset-400: #ff5c85;
+  --color-sunset-500: #ff3366;
+  --color-sunset-600: #e5174b;
 
-  --color-electric-300: #b9a3ff;
-  --color-electric-400: #9877ff;
-  --color-electric-500: #7b4dff;
-  --color-electric-600: #6232f0;
+  --color-electric-300: #c5a3ff;
+  --color-electric-400: #9557ff;
+  --color-electric-500: #7c3aed;
+  --color-electric-600: #6d28d9;
 
-  --color-jungle-300: #7ee0c1;
-  --color-jungle-400: #3fcc9f;
-  --color-jungle-500: #17b890;
-  --color-jungle-600: #0e8f6e;
+  --color-jungle-300: #a3e4e1;
+  --color-jungle-400: #5dc8c3;
+  --color-jungle-500: #2fb3ad;
+  --color-jungle-600: #1e8c87;
 
-  --color-sun-400: #ffc93c;
-  --color-ink: #1a1530;
-  --color-muted: #6b6580;
+  --color-sun-400: #ffcc00;
+  --color-ink: #2a2929;
+  --color-muted: #636162;
 
   --radius-4xl: 2rem;
 
@@ -98,11 +98,11 @@ body {
 /* Leaflet polish */
 .leaflet-container {
   font-family: var(--font-sans);
-  background: #0b1026;
+  background: #1c0f38;
 }
 .leaflet-tooltip.tw-tooltip {
-  background: #0b1026;
-  color: #fff5e6;
+  background: #1c0f38;
+  color: #faf7f3;
   border: 0;
   border-radius: 10px;
   padding: 6px 10px;
@@ -111,6 +111,104 @@ body {
 }
 .leaflet-tooltip.tw-tooltip::before {
   display: none;
+}
+
+/* Travel Journey map markers (Leaflet divIcons) */
+.leaflet-marker-icon.jr-icon {
+  background: none;
+  border: 0;
+  overflow: visible;
+}
+.jr-marker {
+  position: relative;
+  width: 0;
+  height: 0;
+  cursor: pointer;
+}
+.jr-dot {
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #ff3366;
+  border: 2.5px solid #faf7f3;
+  box-shadow: 0 0 0 5px rgba(255,51,102, 0.22), 0 0 22px 4px rgba(255,51,102, 0.75);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), background 0.45s, box-shadow 0.45s;
+}
+.jr-marker.is-visited .jr-dot {
+  background: #ffcc00;
+  transform: scale(0.72);
+  box-shadow: 0 0 0 3px rgba(255,204,0, 0.18), 0 0 12px 2px rgba(255,204,0, 0.55);
+}
+.jr-marker.is-active .jr-dot {
+  transform: scale(1.25);
+}
+.jr-ring {
+  position: absolute;
+  left: -24px;
+  top: -24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 2px solid #ff5c85;
+  opacity: 0;
+  pointer-events: none;
+}
+.jr-marker.is-active .jr-ring {
+  animation: jr-pulse 1.9s ease-out infinite;
+}
+.jr-pop {
+  animation: jr-pop 0.7s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+.jr-label {
+  position: absolute;
+  left: 15px;
+  top: -14px;
+  white-space: nowrap;
+  font: 700 13px/1 var(--font-sans);
+  color: #faf7f3;
+  background: rgba(28,15,56, 0.86);
+  border: 1px solid rgba(250,247,243, 0.14);
+  padding: 7px 10px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.35s, transform 0.35s;
+  pointer-events: none;
+}
+.jr-marker.is-active .jr-label,
+.jr-marker.show-label .jr-label,
+.jr-marker:hover .jr-label {
+  opacity: 1;
+  transform: none;
+}
+.jr-count {
+  position: absolute;
+  left: 4px;
+  top: -20px;
+  font: 800 10px/1 var(--font-sans);
+  color: #1c0f38;
+  background: #ffcc00;
+  border-radius: 999px;
+  padding: 3px 5px;
+  pointer-events: none;
+}
+.jr-plane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  filter: drop-shadow(0 0 8px rgba(255,204,0, 0.9));
+  will-change: transform;
+}
+@keyframes jr-pulse {
+  0% { transform: scale(0.4); opacity: 0.9 }
+  100% { transform: scale(1.5); opacity: 0 }
+}
+@keyframes jr-pop {
+  0% { transform: scale(0) translateY(-30px); opacity: 0 }
+  100% { transform: none; opacity: 1 }
 }
 
 @media (prefers-reduced-motion: reduce) {

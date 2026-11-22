@@ -87,7 +87,7 @@ export function SharePanel({
     { key: "whatsapp", label: "WhatsApp", color: "#25D366", href: url ? whatsappUrl(text, url) : null, icon: <WhatsAppIcon /> },
     { key: "linkedin", label: "LinkedIn", color: "#0A66C2", href: url ? linkedinUrl(url) : null, icon: <span className="text-sm font-black">in</span> },
     { key: "facebook", label: "Facebook", color: "#1877F2", href: url ? facebookUrl(url) : null, icon: <span className="text-base font-black">f</span> },
-    { key: "x", label: "X", color: "#0b1026", href: url ? xUrl(text, url) : null, icon: <span className="text-sm font-black">𝕏</span> },
+    { key: "x", label: "X", color: "#1c0f38", href: url ? xUrl(text, url) : null, icon: <span className="text-sm font-black">𝕏</span> },
   ];
 
   return (
@@ -144,7 +144,7 @@ export function SharePanel({
               else if (url) await copy();
               else void shareImage("slide:9", text);
             }}
-            style={{ background: "#ff6a3d" }}
+            style={{ background: "#ff3366" }}
           >
             <Share2 className="size-5" />
           </ShareBtn>
@@ -199,7 +199,7 @@ function ShareBtn({ label, children, disabled, onClick, style }: { label: string
   );
 }
 
-function WhatsAppIcon() {
+export function WhatsAppIcon() {
   return (
     <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden>
       <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z" />
@@ -207,7 +207,7 @@ function WhatsAppIcon() {
   );
 }
 
-function InstagramIcon() {
+export function InstagramIcon() {
   return (
     <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
       <rect x="3" y="3" width="18" height="18" rx="5" />

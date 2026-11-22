@@ -106,7 +106,7 @@ export function galleryOf(s: StoryData): GalleryPhoto[] {
 
 /* ───────────────────────── shared bits ───────────────────────── */
 
-const INK = "#1a1530";
+const INK = "#2a2929";
 
 function Photo({ src, className, style }: { src: string; className?: string; style?: React.CSSProperties }) {
   // eslint-disable-next-line @next/next/no-img-element
@@ -252,7 +252,7 @@ const CORK: React.CSSProperties = {
   backgroundPosition: "0 0, 3px 5px",
 };
 
-const PIN_COLORS = ["#ff6a3d", "#7b4dff", "#17b890", "#ffc93c", "#e9502a"];
+const PIN_COLORS = ["#ff3366", "#7c3aed", "#2fb3ad", "#ffcc00", "#e5174b"];
 
 function PolaroidCollage({ s, photos, variant, rand, places }: StyleProps) {
   const story = variant === "story";
@@ -404,8 +404,8 @@ function BoothCollage({ s, photos, variant, places }: StyleProps) {
     <Canvas w={360} h={story ? 640 : 360} className="text-cream-50" style={CURTAIN}>
       <div className={cn("relative z-10 flex justify-center", story ? "pt-8" : "pt-3")}>
         <div
-          className={cn("rounded-xl border-[3px] border-sun-400 bg-[#1a1530] text-center", story ? "px-5 py-2.5" : "px-3 py-1")}
-          style={{ boxShadow: "0 0 0 3px #1a1530, 0 0 18px rgba(255,201,60,.55)" }}
+          className={cn("rounded-xl border-[3px] border-sun-400 bg-[#2a2929] text-center", story ? "px-5 py-2.5" : "px-3 py-1")}
+          style={{ boxShadow: "0 0 0 3px #2a2929, 0 0 18px rgba(255,204,0,.55)" }}
         >
           <p className={cn("font-display font-extrabold uppercase leading-none tracking-[0.12em] text-sun-400", story ? "text-[28px]" : "text-[16px]")}>
             ★ Photo Booth ★
@@ -443,21 +443,21 @@ function BoothCollage({ s, photos, variant, places }: StyleProps) {
 
 /* ───────────────────────── 5. Scrapbook ───────────────────────── */
 
-const TAPE = ["#ffc93c", "#b9a3ff", "#7ee0c1", "#ffb38a", "#ff8a5b"];
+const TAPE = ["#ffcc00", "#c5a3ff", "#a3e4e1", "#ff9ab3", "#ff5c85"];
 const DOODLES = ["✈️", "🌴", "📍", "⭐", "🗺️", "🌊", "☀️", "🍜", "🏔️"];
-const RANSOM_BG = ["#fffbf4", INK, "#ffc93c", "#ff6a3d", "#7b4dff", "#17b890"];
+const RANSOM_BG = ["#fffafb", INK, "#ffcc00", "#ff3366", "#7c3aed", "#2fb3ad"];
 
 function Ransom({ text, size, rand }: { text: string; size: number; rand: () => number }) {
   return (
     <span className="inline-flex flex-wrap gap-[3px]">
       {Array.from(text).map((ch, i) => {
         const bg = RANSOM_BG[Math.floor(rand() * RANSOM_BG.length)];
-        const dark = bg === INK || bg === "#7b4dff";
+        const dark = bg === INK || bg === "#7c3aed";
         return (
           <span
             key={i}
             className={cn("inline-block px-[5px] leading-[1.05] shadow-[1px_2px_0_rgba(0,0,0,.25)]", i % 2 ? "font-serif italic" : "font-display font-extrabold")}
-            style={{ background: bg, color: dark ? "#fffbf4" : INK, fontSize: size * (0.85 + rand() * 0.3), transform: `rotate(${(rand() - 0.5) * 12}deg)` }}
+            style={{ background: bg, color: dark ? "#fffafb" : INK, fontSize: size * (0.85 + rand() * 0.3), transform: `rotate(${(rand() - 0.5) * 12}deg)` }}
           >
             {ch}
           </span>
@@ -509,7 +509,7 @@ function ScrapbookCollage({ s, photos, variant, rand, places }: StyleProps) {
               />
               {i % 2 === 0 && (
                 <span
-                  className="absolute bottom-[-8px] right-[-6px] max-w-[110%] truncate rounded-sm bg-[#fffbf4] px-1.5 py-0.5 font-serif text-[11px] italic leading-none shadow-sm"
+                  className="absolute bottom-[-8px] right-[-6px] max-w-[110%] truncate rounded-sm bg-[#fffafb] px-1.5 py-0.5 font-serif text-[11px] italic leading-none shadow-sm"
                   style={{ transform: `rotate(${-c.rot - 4}deg)` }}
                 >
                   {p.city}
@@ -577,7 +577,7 @@ function StampsCollage({ s, photos, variant, rand, places }: StyleProps) {
       w={360}
       h={story ? 640 : 360}
       className="text-ink"
-      style={{ background: "repeating-linear-gradient(135deg, #d6263a 0 14px, #fffbf4 14px 22px, #1f4fbf 22px 36px, #fffbf4 36px 44px)" }}
+      style={{ background: "repeating-linear-gradient(135deg, #d6263a 0 14px, #fffafb 14px 22px, #1f4fbf 22px 36px, #fffafb 36px 44px)" }}
     >
       <div className="absolute inset-[10px] overflow-hidden" style={{ background: PAPER }}>
         <div className={cn("relative z-10 text-center", story ? "pt-7" : "flex items-baseline justify-center gap-2 pt-2")}>
@@ -640,10 +640,10 @@ const SHAPES: Shape[] = [
 ];
 const STICKERS = ["OMG!", "10/10", "core memory", "main character", "no notes", "IYKYK", "WOW", "BEST. YEAR."];
 const STICKER_BG = [
-  { bg: "#7b4dff", fg: "#fffbf4" },
-  { bg: "#ff6a3d", fg: "#fffbf4" },
-  { bg: "#3fcc9f", fg: INK },
-  { bg: "#fffbf4", fg: INK },
+  { bg: "#7c3aed", fg: "#fffafb" },
+  { bg: "#ff3366", fg: "#fffafb" },
+  { bg: "#5dc8c3", fg: INK },
+  { bg: "#fffafb", fg: INK },
 ];
 
 function PopCollage({ s, photos, variant, rand, places }: StyleProps) {
@@ -658,13 +658,13 @@ function PopCollage({ s, photos, variant, rand, places }: StyleProps) {
       h={story ? 640 : 360}
       className="text-ink"
       style={{
-        backgroundColor: "#ffc93c",
-        backgroundImage: "radial-gradient(rgba(255,106,61,.45) 1.7px, transparent 2.2px)",
+        backgroundColor: "#ffcc00",
+        backgroundImage: "radial-gradient(rgba(255,51,102,.45) 1.7px, transparent 2.2px)",
         backgroundSize: "10px 10px",
       }}
     >
-      <div className="absolute -right-16 -top-16 size-56 rounded-full bg-[#ff6a3d]" />
-      <div className="absolute -bottom-20 -left-14 size-60 rounded-full bg-[#7b4dff]" />
+      <div className="absolute -right-16 -top-16 size-56 rounded-full bg-[#ff3366]" />
+      <div className="absolute -bottom-20 -left-14 size-60 rounded-full bg-[#7c3aed]" />
       <div className={cn("relative z-10", story ? "px-6 pt-8" : "flex items-center gap-3 px-4 pt-2")}>
         <p
           className={cn("font-display font-extrabold leading-[0.85] tracking-tighter text-white", story ? "text-[104px]" : "text-[44px]")}
@@ -706,7 +706,7 @@ function PopCollage({ s, photos, variant, rand, places }: StyleProps) {
                   {STICKERS[(i / 2 + stickerOffset) % STICKERS.length]}
                 </span>
               )}
-              {i % 2 === 1 && <span className="absolute -bottom-2 -left-2 text-[22px] text-white [text-shadow:2px_2px_0_#1a1530]">✦</span>}
+              {i % 2 === 1 && <span className="absolute -bottom-2 -left-2 text-[22px] text-white [text-shadow:2px_2px_0_#2a2929]">✦</span>}
             </div>
           );
         })}
@@ -805,7 +805,7 @@ const GENZ_LINES = [
   "delulu but booked it",
 ];
 const EMOJI_STICKERS = ["🍓", "🌈", "🦋", "⭐", "🍒", "💿", "🫧", "🌸", "🍉", "✌️"];
-const PASTELS = ["#ff8ad0", "#ffe66d", "#7fd8ff", "#fffbf4", "#b69cff", "#9ff0c4"];
+const PASTELS = ["#ff8ad0", "#ffe66d", "#7fd8ff", "#fffafb", "#b69cff", "#9ff0c4"];
 const WHITE_OUTLINE = "2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1.5px 1.5px #fff, -1.5px -1.5px #fff, 1.5px -1.5px #fff, -1.5px 1.5px #fff";
 
 function StickersCollage({ s, photos, variant, rand, places }: StyleProps) {
@@ -1042,7 +1042,7 @@ function ReceiptCollage({ s, photos, variant, places }: StyleProps) {
               {rule}
               <div
                 className="mx-auto h-[34px] w-[86%]"
-                style={{ backgroundImage: "repeating-linear-gradient(90deg, #1a1530 0 2px, transparent 2px 3px, #1a1530 3px 4px, transparent 4px 7px, #1a1530 7px 10px, transparent 10px 11px)" }}
+                style={{ backgroundImage: "repeating-linear-gradient(90deg, #2a2929 0 2px, transparent 2px 3px, #2a2929 3px 4px, transparent 4px 7px, #2a2929 7px 10px, transparent 10px 11px)" }}
               />
               <p className="mt-1.5 text-center font-extrabold">thank you, come again ✦</p>
               <p className="text-center text-ink/60">{brandHost()}</p>
@@ -1155,7 +1155,7 @@ function DesktopCollage({ s, photos, variant, rand }: StyleProps) {
   const sun = story ? 190 : 120;
   const file = (city: string) => `${city.toLowerCase().replace(/[^a-z0-9]+/g, "_")}.jpg`;
   return (
-    <Canvas w={360} h={story ? 640 : 360} className="text-white" style={{ background: "linear-gradient(to bottom, #1a0b3d 0%, #5b2a86 45%, #ff6ec7 75%, #ffb38a 100%)" }}>
+    <Canvas w={360} h={story ? 640 : 360} className="text-white" style={{ background: "linear-gradient(to bottom, #1a0b3d 0%, #5b2a86 45%, #ff6ec7 75%, #ff9ab3 100%)" }}>
       {/* synthwave sun + grid floor */}
       <div
         className="absolute left-1/2 -translate-x-1/2 rounded-full"

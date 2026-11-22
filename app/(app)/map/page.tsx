@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, MapPin, Plus } from "lucide-react";
+import { Download, MapPin, Play, Plus } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import * as React from "react";
@@ -56,9 +56,16 @@ export default function MapPage() {
         title="My Travel Map"
         subtitle={`${plural(stats.states.length, "state")} of ${STATE_NAMES.length} explored in ${y}`}
         action={
-          <Button onClick={() => download("poster")} loading={busy === "poster"} variant="dark">
-            <Download /> Download map poster
-          </Button>
+          <>
+            {stats.totalTrips > 0 && (
+              <Link href={`/journey/${y}`} className={buttonVariants()}>
+                <Play /> Watch My Travel Journey
+              </Link>
+            )}
+            <Button onClick={() => download("poster")} loading={busy === "poster"} variant="dark">
+              <Download /> Download map poster
+            </Button>
+          </>
         }
       />
 

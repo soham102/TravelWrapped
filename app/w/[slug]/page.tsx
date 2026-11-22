@@ -42,5 +42,5 @@ async function Content({ params }: Params) {
         <Link href="/" className="rounded-full bg-sunset-500 px-6 py-3 font-semibold text-white">Create your own Travel Wrapped</Link>
       </div>
     );
-  return <PublicWrapped s={w.stats} mode="public" viewKey={slug} />;
+  return <PublicWrapped s={w.stats} mode="public" viewKey={slug} journeyHref={`/w/${slug}/journey`} />;
 }

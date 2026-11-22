@@ -29,10 +29,10 @@ export function Scene({
   sky?: string;
   tone?: "dark" | "light";
 }) {
-  const a = tone === "dark" ? "#0b1026" : "#fff5e6";
-  const b = tone === "dark" ? "#212a57" : "rgba(255,245,230,0.6)";
-  const c = tone === "dark" ? "#323d73" : "rgba(255,245,230,0.35)";
-  const sun = "#ffc93c";
+  const a = tone === "dark" ? "#1c0f38" : "#faf7f3";
+  const b = tone === "dark" ? "#341864" : "rgba(250,247,243,0.6)";
+  const c = tone === "dark" ? "#4b2d85" : "rgba(250,247,243,0.35)";
+  const sun = "#ffcc00";
   return (
     <svg viewBox="0 0 360 200" className={className} preserveAspectRatio="xMidYMax slice" aria-hidden>
       <rect width="360" height="200" fill={sky} />
@@ -40,8 +40,8 @@ export function Scene({
         <>
           <circle cx="262" cy="64" r="26" fill={sun} />
           <path d="M0 200 L70 90 L120 150 L190 50 L260 140 L300 100 L360 170 L360 200Z" fill={c} />
-          <path d="M190 50 L172 78 L186 72 L196 84 L206 70 L212 76Z" fill="#fff5e6" />
-          <path d="M70 90 L58 110 L70 104 L80 112Z" fill="#fff5e6" />
+          <path d="M190 50 L172 78 L186 72 L196 84 L206 70 L212 76Z" fill="#faf7f3" />
+          <path d="M70 90 L58 110 L70 104 L80 112Z" fill="#faf7f3" />
           <path d="M0 200 L40 150 L100 185 L160 120 L230 180 L300 140 L360 190 L360 200Z" fill={b} />
           <path d="M0 200 L60 180 L130 195 L200 172 L280 192 L360 178 L360 200Z" fill={a} />
         </>
@@ -81,7 +81,7 @@ export function Scene({
           <path d="M150 200 V140 H158 L170 80 L180 56 L190 80 L202 140 H210 V200Z" fill={b} />
           <path d="M120 200 V160 L132 130 L144 160 V200Z M216 200 V160 L228 130 L240 160 V200Z" fill={b} />
           <path d="M180 48 v-12" stroke={b} strokeWidth="3" />
-          <path d="M180 36 l12 4 -12 4z" fill="#ff6a3d" />
+          <path d="M180 36 l12 4 -12 4z" fill="#ff3366" />
           <path d="M0 200 V185 Q90 172 180 182 T360 180 V200Z" fill={a} />
         </>
       )}

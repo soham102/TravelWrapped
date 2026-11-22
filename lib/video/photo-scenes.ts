@@ -18,13 +18,13 @@ export interface PhotoVideoInfo {
   places: number;
 }
 
-const CREAM = "#fff5e6";
-const SUNSET = "#ff6a3d";
-const SUN = "#ffc93c";
-const NAVY = "#060a1c";
+const CREAM = "#faf7f3";
+const SUNSET = "#ff3366";
+const SUN = "#ffcc00";
+const NAVY = "#0b0514";
 
 let fonts: { display: string; serif: string; sans: string } | null = null;
-async function getFonts() {
+export async function getFonts() {
   if (fonts) return fonts;
   const css = getComputedStyle(document.documentElement);
   const v = (name: string, fallback: string) => {
@@ -53,7 +53,7 @@ function canvas() {
   return { c, ctx };
 }
 
-async function loadImage(url: string): Promise<HTMLImageElement | null> {
+export async function loadImage(url: string): Promise<HTMLImageElement | null> {
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = url;
@@ -66,7 +66,7 @@ async function loadImage(url: string): Promise<HTMLImageElement | null> {
 }
 
 /** object-fit: cover into (x, y, w, h), biased slightly above centre so faces stay in frame. */
-function drawCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
+export function drawCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
   const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
   const dw = img.naturalWidth * s;
   const dh = img.naturalHeight * s;
@@ -116,8 +116,8 @@ function glow(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, co
 function backdrop(ctx: CanvasRenderingContext2D) {
   ctx.fillStyle = NAVY;
   ctx.fillRect(0, 0, W, H);
-  glow(ctx, 120, 260, 820, "rgba(123,77,255,0.55)");
-  glow(ctx, 980, 1680, 900, "rgba(255,106,61,0.5)");
+  glow(ctx, 120, 260, 820, "rgba(124,58,237,0.55)");
+  glow(ctx, 980, 1680, 900, "rgba(255,51,102,0.5)");
 }
 
 const month = (iso: string) => {
@@ -142,7 +142,7 @@ async function introScene(info: PhotoVideoInfo, imgs: HTMLImageElement[]) {
   const grad = ctx.createLinearGradient(140, 0, 940, 0);
   grad.addColorStop(0, SUN);
   grad.addColorStop(0.5, SUNSET);
-  grad.addColorStop(1, "#b9a3ff");
+  grad.addColorStop(1, "#c5a3ff");
   ctx.fillStyle = grad;
   ctx.font = `800 300px ${f.display}`;
   ctx.fillText(String(info.year), W / 2, 520);
@@ -175,12 +175,12 @@ async function introScene(info: PhotoVideoInfo, imgs: HTMLImageElement[]) {
   ctx.fillStyle = CREAM;
   ctx.font = `700 54px ${f.sans}`;
   ctx.fillText(`${plural(info.totalTrips, "trip")} · ${plural(info.places, "place")} · ${plural(info.totalDays, "day")}`, W / 2, 1510);
-  ctx.fillStyle = "rgba(255,245,230,0.65)";
+  ctx.fillStyle = "rgba(250,247,243,0.65)";
   ctx.font = `italic 400 64px ${f.serif}`;
   ctx.fillText(`${info.ownerName}'s year, one photo at a time`, W / 2, 1610);
   ctx.font = `700 30px ${f.sans}`;
   ctx.letterSpacing = "6px";
-  ctx.fillStyle = "rgba(255,245,230,0.45)";
+  ctx.fillStyle = "rgba(250,247,243,0.45)";
   ctx.fillText(brandHost().toUpperCase(), W / 2, 1820);
   ctx.letterSpacing = "0px";
   return c;
@@ -200,7 +200,7 @@ async function photoScene(img: HTMLImageElement, p: GalleryPhoto, i: number, n: 
   ctx.fillRect(0, 0, W, 420);
   const bottom = ctx.createLinearGradient(0, H - 820, 0, H);
   bottom.addColorStop(0, "rgba(0,0,0,0)");
-  bottom.addColorStop(1, "rgba(6,10,28,0.92)");
+  bottom.addColorStop(1, "rgba(11,5,20,0.92)");
   ctx.fillStyle = bottom;
   ctx.fillRect(0, H - 820, W, 820);
 
@@ -208,7 +208,7 @@ async function photoScene(img: HTMLImageElement, p: GalleryPhoto, i: number, n: 
   const gap = 10;
   const seg = (W - 120 - gap * (n - 1)) / n;
   for (let k = 0; k < n; k++) {
-    ctx.fillStyle = k <= i ? CREAM : "rgba(255,245,230,0.3)";
+    ctx.fillStyle = k <= i ? CREAM : "rgba(250,247,243,0.3)";
     ctx.beginPath();
     ctx.roundRect(60 + k * (seg + gap), 70, seg, 8, 4);
     ctx.fill();
@@ -216,9 +216,9 @@ async function photoScene(img: HTMLImageElement, p: GalleryPhoto, i: number, n: 
 
   // Year branding.
   ctx.textAlign = "left";
-  pill(ctx, `✈  TRAVEL WRAPPED ${info.year}`, 60, 120, `800 34px ${f.sans}`, "rgba(6,10,28,0.55)", CREAM);
+  pill(ctx, `✈  TRAVEL WRAPPED ${info.year}`, 60, 120, `800 34px ${f.sans}`, "rgba(11,5,20,0.55)", CREAM);
   ctx.textAlign = "right";
-  ctx.fillStyle = "rgba(255,245,230,0.85)";
+  ctx.fillStyle = "rgba(250,247,243,0.85)";
   ctx.font = `700 38px ${f.sans}`;
   ctx.fillText(`${i + 1} / ${n}`, W - 60, 168);
 
@@ -233,11 +233,11 @@ async function photoScene(img: HTMLImageElement, p: GalleryPhoto, i: number, n: 
   fitFont(ctx, p.city, W - 140, 150, (px) => `800 ${px}px ${f.display}`);
   ctx.fillText(p.city, 66, H - 250);
   if (p.tripName && p.tripName !== p.city) {
-    ctx.fillStyle = "rgba(255,245,230,0.85)";
+    ctx.fillStyle = "rgba(250,247,243,0.85)";
     fitFont(ctx, p.tripName, W - 140, 60, (px) => `italic 400 ${px}px ${f.serif}`);
     ctx.fillText(p.tripName, 70, H - 165);
   }
-  ctx.fillStyle = "rgba(255,245,230,0.5)";
+  ctx.fillStyle = "rgba(250,247,243,0.5)";
   ctx.font = `700 28px ${f.sans}`;
   ctx.letterSpacing = "5px";
   ctx.fillText(brandHost().toUpperCase(), 70, H - 80);
@@ -256,18 +256,18 @@ async function outroScene(info: PhotoVideoInfo) {
   const grad = ctx.createLinearGradient(140, 0, 940, 0);
   grad.addColorStop(0, SUN);
   grad.addColorStop(0.5, SUNSET);
-  grad.addColorStop(1, "#b9a3ff");
+  grad.addColorStop(1, "#c5a3ff");
   ctx.fillStyle = grad;
   ctx.font = `800 280px ${f.display}`;
   ctx.fillText(String(info.year), W / 2, 960);
   ctx.fillStyle = CREAM;
   ctx.font = `800 64px ${f.display}`;
   ctx.fillText(`${plural(info.places, "place")}. ${plural(info.totalTrips, "trip")}.`, W / 2, 1140);
-  ctx.fillStyle = "rgba(255,245,230,0.75)";
+  ctx.fillStyle = "rgba(250,247,243,0.75)";
   ctx.font = `italic 400 66px ${f.serif}`;
   ctx.fillText("Countless memories. ✈️", W / 2, 1240);
   pill(ctx, "Make your Travel Wrapped", W / 2, 1560, `800 40px ${f.sans}`, SUNSET, "#fff", true);
-  ctx.fillStyle = "rgba(255,245,230,0.5)";
+  ctx.fillStyle = "rgba(250,247,243,0.5)";
   ctx.font = `700 32px ${f.sans}`;
   ctx.letterSpacing = "6px";
   ctx.fillText(brandHost().toUpperCase(), W / 2, 1720);

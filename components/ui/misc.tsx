@@ -6,7 +6,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("rounded-3xl border border-navy-900/8 bg-white p-5 shadow-[0_1px_0_rgba(11,16,38,0.04)] sm:p-6", className)} {...props} />;
+  return <div className={cn("rounded-3xl border border-navy-900/8 bg-white p-5 shadow-[0_1px_0_rgba(28,15,56,0.04)] sm:p-6", className)} {...props} />;
 }
 
 export function Badge({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
@@ -100,7 +100,7 @@ export function Dialog({
             aria-modal="true"
             aria-label={title}
             className={cn(
-              "max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-cream-50 p-6 shadow-2xl sm:max-w-lg sm:rounded-3xl",
+              "max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-cream-50 p-6 text-ink shadow-2xl sm:max-w-lg sm:rounded-3xl",
               className,
             )}
             initial={{ y: 40, opacity: 0 }}

@@ -26,17 +26,17 @@ function escapeHtml(s: string) {
 }
 
 function emailHtml(sender: string, message: string, link: string) {
-  return `<!doctype html><html><body style="margin:0;background:#fff5e6;font-family:Arial,Helvetica,sans-serif;color:#1a1530">
+  return `<!doctype html><html><body style="margin:0;background:#faf7f3;font-family:Arial,Helvetica,sans-serif;color:#2a2929">
   <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
-  <table width="100%" style="max-width:520px;background:#0b1026;border-radius:24px;color:#fff5e6" cellpadding="0" cellspacing="0">
+  <table width="100%" style="max-width:520px;background:#1c0f38;border-radius:24px;color:#faf7f3" cellpadding="0" cellspacing="0">
   <tr><td style="padding:32px 28px">
-    <p style="margin:0;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#ff8a5b;font-weight:bold">Travel Wrapped</p>
+    <p style="margin:0;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#ff5c85;font-weight:bold">Travel Wrapped</p>
     <h1 style="margin:12px 0 0;font-size:30px;line-height:1.1">${escapeHtml(sender)} invited you to make your Travel Wrapped</h1>
-    <p style="margin:18px 0 0;font-size:16px;line-height:1.5;color:#f6e7cf">“${escapeHtml(message)}”</p>
-    <a href="${link}" style="display:inline-block;margin-top:24px;background:#ff6a3d;color:#fff;text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px">Create my Travel Wrapped</a>
+    <p style="margin:18px 0 0;font-size:16px;line-height:1.5;color:#f2ebfd">“${escapeHtml(message)}”</p>
+    <a href="${link}" style="display:inline-block;margin-top:24px;background:#ff3366;color:#fff;text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px">Create my Travel Wrapped</a>
     <p style="margin:24px 0 0;font-size:12px;color:#9a97b0">Map every city, every state and every memory from your year — then share it.</p>
   </td></tr></table>
-  <p style="font-size:11px;color:#6b6580;margin-top:16px">Built by Soham for the goSTOPS Build Sprint. Not an official goSTOPS product.<br/>You received this because ${escapeHtml(sender)} entered your email. No further emails will be sent.</p>
+  <p style="font-size:11px;color:#636162;margin-top:16px">Built by Soham for the goSTOPS Build Sprint. Not an official goSTOPS product.<br/>You received this because ${escapeHtml(sender)} entered your email. No further emails will be sent.</p>
   </td></tr></table></body></html>`;
 }
 

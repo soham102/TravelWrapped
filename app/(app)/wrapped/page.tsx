@@ -39,7 +39,7 @@ export default function WrappedListPage() {
           {years.map((y, i) => {
             const s = computeWrapped(trips, y, profile?.full_name ?? null);
             const rec = records.find((r) => r.year === y);
-            const bg = ["linear-gradient(150deg,#6232f0,#ff6a3d)", "linear-gradient(150deg,#0e8f6e,#0b1026)", "linear-gradient(150deg,#ff6a3d,#ffc93c)"][i % 3];
+            const bg = ["linear-gradient(150deg,#6d28d9,#ff3366)", "linear-gradient(150deg,#1e8c87,#1c0f38)", "linear-gradient(150deg,#ff3366,#ffcc00)"][i % 3];
             return (
               <Link key={y} href={`/wrapped/${y}`} className="grain group relative flex min-h-64 flex-col overflow-hidden rounded-[28px] p-6 text-cream-50" style={{ background: bg }}>
                 <div className="relative z-10 flex items-center justify-between">

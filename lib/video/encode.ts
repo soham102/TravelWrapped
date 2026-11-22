@@ -38,7 +38,7 @@ function drawFrame(ctx: CanvasRenderingContext2D, scenes: CanvasImageSource[], s
   const n = scenes.length;
   const i = Math.min(n - 1, Math.floor(t / sceneSeconds));
   const local = t - i * sceneSeconds;
-  ctx.fillStyle = "#060a1c";
+  ctx.fillStyle = "#0b0514";
   ctx.fillRect(0, 0, VIDEO_W, VIDEO_H);
   drawScene(ctx, scenes[i], local / sceneSeconds, i, 1);
   // Crossfade into the next scene during the last moments of this one.
@@ -47,7 +47,7 @@ function drawFrame(ctx: CanvasRenderingContext2D, scenes: CanvasImageSource[], s
   // Fade in from / out to black.
   const edge = Math.max(0, 1 - t / 0.3, 1 - (total - t) / 0.6);
   if (edge > 0) {
-    ctx.fillStyle = `rgba(6,10,28,${Math.min(1, edge)})`;
+    ctx.fillStyle = `rgba(11,5,20,${Math.min(1, edge)})`;
     ctx.fillRect(0, 0, VIDEO_W, VIDEO_H);
   }
 }
@@ -59,10 +59,38 @@ export async function encodeStoryVideo(opts: {
   onProgress?: (fraction: number) => void;
   signal?: AbortSignal;
 }): Promise<VideoResult> {
-  const mb = await import("mediabunny");
   const total = opts.scenes.length * opts.sceneSeconds;
+  return encodeCanvasVideo({
+    width: VIDEO_W,
+    height: VIDEO_H,
+    duration: total,
+    audio: opts.audio,
+    onProgress: opts.onProgress,
+    signal: opts.signal,
+    draw: (ctx, t) => drawFrame(ctx, opts.scenes, opts.sceneSeconds, t, total),
+  });
+}
 
-  const videoCodec = await mb.getFirstEncodableVideoCodec(["avc", "vp9", "vp8"], { width: VIDEO_W, height: VIDEO_H, frameRate: FPS });
+/**
+ * Encodes `duration` seconds of frames produced by `draw(ctx, t)` into MP4 (H.264/AAC) where the
+ * browser can, otherwise WebM (VP9/VP8 + Opus). Entirely on-device via WebCodecs.
+ */
+export async function encodeCanvasVideo(opts: {
+  width: number;
+  height: number;
+  duration: number;
+  fps?: number;
+  draw: (ctx: CanvasRenderingContext2D, t: number) => void;
+  audio: AudioBuffer | null;
+  onProgress?: (fraction: number) => void;
+  signal?: AbortSignal;
+}): Promise<VideoResult> {
+  const mb = await import("mediabunny");
+  const fps = opts.fps ?? FPS;
+  const { width, height } = opts;
+
+  if (typeof VideoEncoder === "undefined") throw new VideoUnsupportedError("This browser can't create videos. Try Chrome, Edge or Safari (on a phone or computer).");
+  const videoCodec = await mb.getFirstEncodableVideoCodec(["avc", "vp9", "vp8"], { width, height, frameRate: fps });
   if (!videoCodec) throw new VideoUnsupportedError("This browser can't create videos. Try Chrome, Edge or Safari (on a phone or computer).");
   const mp4 = videoCodec === "avc";
   const format = mp4 ? new mb.Mp4OutputFormat({ fastStart: "in-memory" }) : new mb.WebMOutputFormat();
@@ -70,13 +98,13 @@ export async function encodeStoryVideo(opts: {
   const output = new mb.Output({ format, target });
 
   const canvas = document.createElement("canvas");
-  canvas.width = VIDEO_W;
-  canvas.height = VIDEO_H;
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d", { alpha: false });
   if (!ctx) throw new VideoUnsupportedError("Couldn't start the video renderer in this browser.");
 
   const videoSource = new mb.CanvasSource(canvas, { codec: videoCodec, quality: mb.QUALITY_HIGH, keyFrameInterval: 2 });
-  output.addVideoTrack(videoSource, { frameRate: FPS });
+  output.addVideoTrack(videoSource, { frameRate: fps });
 
   let audioSource: InstanceType<typeof mb.AudioBufferSource> | null = null;
   let audioDropped = false;
@@ -97,11 +125,11 @@ export async function encodeStoryVideo(opts: {
       await audioSource.add(opts.audio);
       audioSource.close();
     }
-    const frames = Math.round(total * FPS);
+    const frames = Math.round(opts.duration * fps);
     for (let f = 0; f < frames; f++) {
       if (opts.signal?.aborted) throw new DOMException("Cancelled", "AbortError");
-      drawFrame(ctx, opts.scenes, opts.sceneSeconds, f / FPS, total);
-      await videoSource.add(f / FPS, 1 / FPS);
+      opts.draw(ctx, f / fps);
+      await videoSource.add(f / fps, 1 / fps);
       if (f % 6 === 0) opts.onProgress?.(f / frames);
     }
     videoSource.close();

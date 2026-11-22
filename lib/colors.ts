@@ -1,1 +1,1 @@
-export const TRIP_COLORS = ["#ff6a3d", "#7b4dff", "#17b890", "#ffc93c", "#ff8a5b", "#9877ff", "#3fcc9f", "#e9502a", "#b9a3ff", "#7ee0c1"];
+export const TRIP_COLORS = ["#ff3366", "#7c3aed", "#2fb3ad", "#ffcc00", "#ff5c85", "#9557ff", "#5dc8c3", "#e5174b", "#c5a3ff", "#a3e4e1"];

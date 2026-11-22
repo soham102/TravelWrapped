@@ -99,10 +99,10 @@ export default function AdminPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={funnel} layout="vertical" margin={{ left: 8, right: 16 }}>
                 <CartesianGrid horizontal={false} stroke="#0b102614" />
-                <XAxis type="number" allowDecimals={false} tick={{ fontSize: 11, fill: "#6b6580" }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="label" width={118} tick={{ fontSize: 11, fill: "#1a1530" }} axisLine={false} tickLine={false} />
+                <XAxis type="number" allowDecimals={false} tick={{ fontSize: 11, fill: "#636162" }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="label" width={118} tick={{ fontSize: 11, fill: "#2a2929" }} axisLine={false} tickLine={false} />
                 <Tooltip cursor={{ fill: "#0b10260a" }} contentStyle={{ borderRadius: 12, border: "1px solid #0b102614" }} />
-                <Bar dataKey="value" name="Count" fill="#7b4dff" radius={[0, 4, 4, 0]} barSize={14} />
+                <Bar dataKey="value" name="Count" fill="#7c3aed" radius={[0, 4, 4, 0]} barSize={14} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -114,10 +114,10 @@ export default function AdminPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={daily} margin={{ right: 8 }}>
                 <CartesianGrid vertical={false} stroke="#0b102614" />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#6b6580" }} axisLine={false} tickLine={false} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#6b6580" }} axisLine={false} tickLine={false} width={28} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#636162" }} axisLine={false} tickLine={false} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#636162" }} axisLine={false} tickLine={false} width={28} />
                 <Tooltip cursor={{ fill: "#0b10260a" }} contentStyle={{ borderRadius: 12, border: "1px solid #0b102614" }} />
-                <Bar dataKey="signups" name="Signups" fill="#ff6a3d" radius={[4, 4, 0, 0]} barSize={16} />
+                <Bar dataKey="signups" name="Signups" fill="#ff3366" radius={[4, 4, 0, 0]} barSize={16} />
               </BarChart>
             </ResponsiveContainer>
           </div>
