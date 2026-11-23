@@ -91,7 +91,7 @@ export default function AdminPage() {
         <StatTile label="Referral signups" value={m.referred} accent="navy" />
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-2">
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card>
           <p className="font-display text-lg font-bold">Event totals</p>
           <p className="mb-3 text-xs text-muted">All time</p>

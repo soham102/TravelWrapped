@@ -1,7 +1,6 @@
 "use client";
 
-import { BarChart3, Database, KeyRound, LogOut } from "lucide-react";
-import Link from "next/link";
+import { KeyRound, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
@@ -99,18 +98,6 @@ export default function ProfilePage() {
           </form>
         </Card>
         )}
-
-        <Card className="space-y-3">
-          <p className="flex items-center gap-2 font-display text-lg font-bold"><Database className="size-5" /> Data & privacy</p>
-          <p className="text-sm text-muted">
-            {store.mode === "supabase"
-              ? "Your trips and photos are stored in Supabase and protected by row-level security — only you can read them. Public links expose only your stats and map, never photos or notes."
-              : "Local mode: everything is stored in this browser only. Clearing site data removes it."}
-          </p>
-          <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm font-semibold text-electric-600 hover:underline">
-            <BarChart3 className="size-4" /> Product analytics (admins)
-          </Link>
-        </Card>
 
         <Button
           variant="outline"

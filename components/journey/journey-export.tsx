@@ -98,7 +98,7 @@ export function JourneyExportDialog({
   return (
     <Dialog open={open} onClose={close} title="Download my journey" className="sm:max-w-xl">
       {phase.name === "done" ? (
-        <div className="grid items-center gap-5 sm:grid-cols-[180px_1fr]">
+        <div className="grid grid-cols-1 items-center gap-5 sm:grid-cols-[180px_1fr]">
           {phase.kind === "video" ? (
             <video src={phase.url} controls playsInline autoPlay muted className="mx-auto aspect-[9/16] w-full max-w-[180px] rounded-2xl bg-navy-950 shadow-xl" />
           ) : (
@@ -145,7 +145,7 @@ export function JourneyExportDialog({
         </div>
       ) : (
         <div className="space-y-5">
-          <div className="grid gap-2.5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
             <button type="button" onClick={() => make("video")} className="flex flex-col items-start gap-1 rounded-2xl border-2 border-navy-900 bg-navy-900 p-4 text-left text-cream-50 transition hover:bg-navy-800">
               <Clapperboard className="size-6 text-sunset-400" />
               <span className="mt-1 font-display text-lg font-bold">Video</span>

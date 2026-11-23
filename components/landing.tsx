@@ -45,15 +45,12 @@ export function Landing() {
             {user ? (
               <Link href="/dashboard" className={buttonVariants({ size: "sm", variant: "light" })}>Dashboard</Link>
             ) : (
-              <>
-                <Link href="/login" className="rounded-full px-4 py-2 text-sm font-semibold text-cream-100">Log in</Link>
-                <Link href="/signup" className={buttonVariants({ size: "sm" })}>Sign up</Link>
-              </>
+              <Link href="/login" className="rounded-full px-4 py-2 text-sm font-semibold text-cream-100">Log in</Link>
             )}
           </div>
         </nav>
 
-        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-5 pb-20 pt-8 lg:grid-cols-[1.15fr_1fr] lg:pb-28 lg:pt-14">
+        <div className="relative z-10 mx-auto grid grid-cols-1 max-w-6xl items-center gap-10 px-5 pb-20 pt-8 lg:grid-cols-[1.15fr_1fr] lg:pb-28 lg:pt-14">
           <div>
             <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-sunset-300">
               <Sparkles className="size-3.5" /> Your journeys. Your memories. Your year.
@@ -76,10 +73,10 @@ export function Landing() {
 
           <div className="relative mx-auto w-full max-w-[460px]">
             <IndiaMapSvg width={440} height={500} theme="night" visitedStates={demo.states} points={statsToPoints(demo)} labels={8} routes animate interactive className="w-full" />
-            <FloatingCard className="-left-4 top-6 w-[118px] -rotate-6 sm:-left-10 sm:w-[136px]" delay={1.1}>
+            <FloatingCard className="left-1 top-6 w-[108px] -rotate-6 sm:-left-10 sm:w-[136px]" delay={1.1}>
               <NumbersSlide s={demo} />
             </FloatingCard>
-            <FloatingCard className="-right-2 bottom-2 w-[118px] rotate-6 sm:-right-8 sm:w-[136px]" delay={1.3}>
+            <FloatingCard className="bottom-2 right-1 w-[108px] rotate-6 sm:-right-8 sm:w-[136px]" delay={1.3}>
               <PersonalitySlide s={demo} />
             </FloatingCard>
           </div>
@@ -101,7 +98,7 @@ export function Landing() {
         <div className="mx-auto max-w-6xl px-5">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-sunset-600">How it works</p>
           <h2 className="mt-2 max-w-2xl font-display text-4xl font-extrabold leading-tight sm:text-5xl">Three steps from “where did this year go?” to a story you&apos;ll want to post.</h2>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
             {[
               { icon: PenLine, color: "bg-sunset-500", t: "Add your trips", b: "Search any destination, pick your dates, tag who you went with. Multi-city routes, photos and memories welcome." },
               { icon: Sparkles, color: "bg-electric-500", t: "We crunch your year", b: "Real stats only — cities, states, longest trip, most-visited place, plus a travel personality with the reasons behind it." },
@@ -122,7 +119,7 @@ export function Landing() {
 
       {/* ── Interactive preview ── */}
       <section className="bg-navy-900 py-20 text-cream-100 sm:py-28">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 lg:grid-cols-[1fr_380px]">
+        <div className="mx-auto grid grid-cols-1 max-w-6xl items-center gap-12 px-5 lg:grid-cols-[1fr_380px]">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-sunset-400">Interactive preview</p>
             <h2 className="mt-2 font-display text-4xl font-extrabold leading-tight sm:text-5xl">Tap through a real Travel Wrapped.</h2>
@@ -199,7 +196,7 @@ export function Landing() {
         <div className="mx-auto max-w-6xl px-5">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-sunset-400">Built different</p>
           <h2 className="mt-2 max-w-2xl font-display text-4xl font-extrabold leading-tight sm:text-5xl">No fake stats. No public profile. Just your year.</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
             {[
               { icon: MapPinned, t: "Every number is real", b: "Stats, achievements and your personality come only from the trips you enter. Distance shows up only when you log it." },
               { icon: Lock, t: "Private by default", b: "Your trips and photos are visible only to you. Public links are opt-in, revocable, and never include photos or notes." },

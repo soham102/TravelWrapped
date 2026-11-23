@@ -35,7 +35,7 @@ export default function WrappedListPage() {
       {years.length === 0 ? (
         <EmptyState icon={<Sparkles className="size-6" />} title="No Wrapped yet" body="Add at least one trip and we'll turn it into your story." action={<Link href="/trips/new" className={buttonVariants()}><Plus /> Add a trip</Link>} />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {years.map((y, i) => {
             const s = computeWrapped(trips, y, profile?.full_name ?? null);
             const rec = records.find((r) => r.year === y);

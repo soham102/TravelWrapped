@@ -161,7 +161,7 @@ export function SharePanel({
           <li className="flex gap-3"><Step n={2} /> Open Instagram → <b>Your story</b> (or a new post) and pick the image.</li>
           <li className="flex gap-3"><Step n={3} /> Add the link sticker{url ? " with your public link" : ""} so friends can view the full Wrapped.</li>
         </ol>
-        <div className="mt-6 grid gap-2">
+        <div className="mt-6 grid grid-cols-1 gap-2">
           <Button onClick={() => shareImage("slide:9", text, url ?? undefined)} loading={busy === "slide:9"}>
             <Share2 /> Share story image (opens share sheet on mobile)
           </Button>

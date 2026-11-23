@@ -93,7 +93,7 @@ export default function TripsPage() {
           }
         />
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {visible.map((t) => (
             <TripCard key={t.id} trip={t} onDelete={() => setToDelete(t)} />
           ))}

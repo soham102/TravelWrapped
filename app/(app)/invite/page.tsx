@@ -92,7 +92,7 @@ export default function InvitePage() {
     <div>
       <PageHeader title="Invite friends" subtitle="Travel Wrapped is more fun when your whole crew has one." />
 
-      <div className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.3fr_1fr]">
         <div className="space-y-5">
           <Card className="bg-navy-900 text-cream-100">
             <p className="font-display text-xl font-bold">Your personal invite link</p>

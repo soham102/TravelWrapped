@@ -13,7 +13,7 @@ import { StoryViewer } from "@/components/story/story-viewer";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { trackOnce } from "@/lib/analytics";
 import { statsToPoints } from "@/lib/hooks";
-import { plural } from "@/lib/utils";
+import { cn, plural } from "@/lib/utils";
 import { shareLine } from "@/lib/wrapped/compute";
 
 export function PublicWrapped({ s, mode, viewKey, journeyHref }: { s: StoryData; mode: "public" | "demo"; viewKey: string; journeyHref?: string }) {
@@ -41,7 +41,7 @@ export function PublicWrapped({ s, mode, viewKey, journeyHref }: { s: StoryData;
       <section className="grain relative overflow-hidden">
         <div className="absolute -left-40 top-0 size-[32rem] rounded-full bg-electric-500/30 blur-3xl" />
         <div className="absolute -right-40 bottom-0 size-[32rem] rounded-full bg-sunset-500/30 blur-3xl" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.1fr_1fr] md:py-16">
+        <div className="relative mx-auto grid grid-cols-1 max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.1fr_1fr] md:py-16">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-sunset-400">{s.ownerName}&apos;s Travel Wrapped {s.year}</p>
             <h1 className="mt-3 font-display text-5xl font-extrabold leading-[0.95] sm:text-7xl">{s.personality.title}</h1>
@@ -78,7 +78,7 @@ export function PublicWrapped({ s, mode, viewKey, journeyHref }: { s: StoryData;
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-12">
-        <div className="grid items-start gap-8 md:grid-cols-[1fr_1.1fr]">
+        <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[1fr_1.1fr]">
           <div className="mx-auto w-full max-w-[340px]">
             <StoryViewer s={s} embedded />
           </div>
@@ -110,10 +110,10 @@ export function PublicWrapped({ s, mode, viewKey, journeyHref }: { s: StoryData;
       </section>
 
       <section className="mx-auto max-w-6xl px-5 pb-16">
-        <div className="rounded-[32px] bg-sunset-500 p-8 text-center sm:p-12">
+        <div className="rounded-[32px] bg-sunset-500 p-6 text-center sm:p-12">
           <p className="font-display text-3xl font-extrabold text-navy-950 sm:text-5xl">Where did your {s.year} take you?</p>
           <p className="mx-auto mt-3 max-w-lg text-cream-50">Add your trips and get your own map, personality and shareable story in minutes. Free.</p>
-          <Link href="/signup" className={buttonVariants({ size: "lg", variant: "dark", className: "mt-6" })}>
+          <Link href="/signup" className={cn(buttonVariants({ size: "lg", variant: "dark" }), "mt-6 h-auto min-h-14 whitespace-normal py-3 sm:whitespace-nowrap")}>
             Create my Travel Wrapped <ArrowRight />
           </Link>
         </div>

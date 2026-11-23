@@ -37,7 +37,7 @@ export function Disclaimer({ className }: { className?: string }) {
 export function SiteFooter({ dark = true }: { dark?: boolean }) {
   return (
     <footer className={cn(dark ? "bg-navy-950 text-cream-200/70" : "bg-cream-200 text-muted")}>
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:grid-cols-[1.5fr_1fr_1fr]">
+      <div className="mx-auto grid grid-cols-1 max-w-6xl gap-8 px-5 py-12 sm:grid-cols-[1.5fr_1fr_1fr]">
         <div>
           <Logo light={dark} />
           <p className="mt-3 max-w-xs text-sm">Your journeys. Your memories. Your year. Turn every trip into a story worth sharing.</p>

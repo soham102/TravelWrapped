@@ -89,7 +89,7 @@ export default function DashboardPage() {
             <IndiaMapSvg width={300} height={340} theme="night" animate className="mx-auto w-full max-w-[260px]" />
           </div>
         </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
             ["1", "Add trips", "Cities, dates and who you went with."],
             ["2", "Generate", "We crunch your real data into 10 story slides."],
@@ -142,7 +142,7 @@ export default function DashboardPage() {
 
       {journey.stops.length > 0 && <JourneyEntryCard href={`/journey/${year}`} journey={journey} compact className="mt-6" />}
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Wrapped hero */}
         <Link href={`/wrapped/${year}`} className="grain group relative overflow-hidden rounded-[28px] p-6 text-cream-50 lg:col-span-2" style={{ background: "linear-gradient(135deg,#6d28d9,#7c3aed 40%,#ff3366)" }}>
           <div className="relative z-10 flex h-full flex-col">
@@ -192,7 +192,7 @@ export default function DashboardPage() {
           )}
         </Card>
 
-        <div className="grid gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <QuickLink href="/wrapped" icon={<Globe />} title="Shared stories" body={publicOnes.length ? `${plural(publicOnes.length, "public link")} live` : "Nothing shared publicly yet"} />
           <QuickLink href="/invite" icon={<Gift />} title="Invitations" body={invites.length ? `${accepted} joined · ${pending} pending` : "Invite friends to make theirs"} />
           <QuickLink href="/profile" icon={<Settings />} title="Profile settings" body={profile?.email ?? ""} />

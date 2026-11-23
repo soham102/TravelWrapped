@@ -41,7 +41,7 @@ export function IntroSlide({ s }: SlideProps) {
         </R>
         <R delay={0.25} y={30}>
           <p
-            className="font-display text-[132px] font-extrabold leading-[0.85] tracking-tighter"
+            className="font-display text-[116px] font-extrabold leading-[0.85] tracking-tighter"
             style={{ backgroundImage: "linear-gradient(120deg,#ffcc00,#ff3366 45%,#c5a3ff)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}
           >
             {s.year}

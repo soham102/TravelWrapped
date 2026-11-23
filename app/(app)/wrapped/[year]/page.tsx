@@ -190,7 +190,7 @@ export default function WrappedStudioPage() {
       <section className="mt-10">
         <h2 className="font-display text-2xl font-extrabold">More formats</h2>
         <p className="mb-4 text-sm text-muted">Same travel year, different stories.</p>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {FORMATS.filter((f) => "C" in f).map((f) => {
             const C = (f as unknown as { C: React.ComponentType<{ s: typeof stats }> }).C;
             const key = f.key as "post" | "poster" | "timeline";
@@ -269,7 +269,7 @@ export default function WrappedStudioPage() {
               );
             })}
           </div>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             {COLLAGE_FORMATS.map((f) => (
               <div key={f.key} className="flex flex-col rounded-3xl border border-navy-900/8 bg-white p-4">
                 <div className="flex flex-1 items-center justify-center rounded-2xl bg-cream-100 p-4">
@@ -311,7 +311,7 @@ export default function WrappedStudioPage() {
         <VideoMaker s={stats} capture={capture} fileBase={`travel-wrapped-${year}`} shareText={text} />
       </section>
 
-      <section className="mt-10 grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+      <section className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-[1.4fr_1fr]">
         <SharePanel record={record} onRecord={setRecord} ensureFresh={async () => (stale ? save() : record)} shareImage={shareImage} download={download} busy={busy} />
         <div className="rounded-3xl bg-electric-500 p-6 text-cream-50">
           <p className="font-display text-2xl font-extrabold leading-tight">Travel is better with friends.</p>

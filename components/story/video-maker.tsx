@@ -212,7 +212,7 @@ export function VideoMaker({
   if (phase.name === "done") {
     const { result, url } = phase;
     return (
-      <div className="grid items-center gap-6 rounded-3xl border border-navy-900/8 bg-white p-5 sm:grid-cols-[240px_1fr] sm:p-6">
+      <div className="grid grid-cols-1 items-center gap-6 rounded-3xl border border-navy-900/8 bg-white p-5 sm:grid-cols-[240px_1fr] sm:p-6">
         <video src={url} controls playsInline autoPlay className="mx-auto aspect-[9/16] w-full max-w-[240px] rounded-2xl bg-navy-950 shadow-xl" />
         <div>
           <p className="flex items-center gap-2 font-display text-2xl font-extrabold">
@@ -285,7 +285,7 @@ export function VideoMaker({
       <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-muted">
         <Clapperboard className="size-4" /> What should the video show?
       </p>
-      <div className="mb-6 grid gap-2.5 sm:grid-cols-2" role="radiogroup" aria-label="Video type">
+      <div className="mb-6 grid grid-cols-1 gap-2.5 sm:grid-cols-2" role="radiogroup" aria-label="Video type">
         {sources.map((o) => {
           const active = source === o.key;
           const disabled = working || (o.key === "photos" && !hasPhotos);
@@ -315,7 +315,7 @@ export function VideoMaker({
       <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-muted">
         <Music2 className="size-4" /> Pick your soundtrack
       </p>
-      <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
         {TRACKS.map((t) => {
           const active = music.kind === "track" && music.key === t.key;
           return (

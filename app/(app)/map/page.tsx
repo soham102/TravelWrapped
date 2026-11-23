@@ -90,7 +90,7 @@ export default function MapPage() {
         )}
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[1.6fr_1fr]">
         <div className="relative h-[60vh] min-h-[420px] overflow-hidden rounded-[28px] border border-navy-900/10 bg-navy-900">
           <LeafletMap trips={yearTrips} visitedStates={stats.states} />
         </div>
