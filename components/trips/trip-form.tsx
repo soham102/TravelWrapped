@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUp, Camera, ImagePlus, MapPin, Trash2, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Camera, ExternalLink, Images, ImagePlus, Loader2, MapPin, Trash2, X } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/providers";
@@ -10,6 +10,14 @@ import { Card } from "@/components/ui/misc";
 import { track } from "@/lib/analytics";
 import { MAX_PHOTOS_PER_TRIP } from "@/lib/config";
 import { destinationKey } from "@/lib/destinations";
+import {
+  GooglePhotosCancelled,
+  getGooglePhotosToken,
+  hasValidGoogleToken,
+  isGooglePhotosConfigured,
+  loadGoogleIdentity,
+  pickFromGooglePhotos,
+} from "@/lib/google-photos";
 import { resizeImage, validateImage } from "@/lib/image";
 import {
   TRAVEL_CATEGORIES,
@@ -32,6 +40,15 @@ interface PendingPhoto {
   preview: string;
 }
 
+type GooglePhotosState =
+  | { status: "idle" }
+  | { status: "auth" }
+  | { status: "picking"; pickerUri?: string; blocked?: boolean }
+  | { status: "downloading"; count: number };
+
+const PICKER_WINDOW = "google-photos-picker";
+const PICKER_FEATURES = "popup,width=1024,height=760";
+
 export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Trip) => void }) {
   const { store } = useAuth();
   const [destinations, setDestinations] = React.useState<DestinationInput[]>(
@@ -50,8 +67,17 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
   const [errors, setErrors] = React.useState<Errors>({});
   const [saving, setSaving] = React.useState(false);
   const fileRef = React.useRef<HTMLInputElement>(null);
+  const [gp, setGp] = React.useState<GooglePhotosState>({ status: "idle" });
+  const gpAbort = React.useRef<AbortController | null>(null);
+  const gpWindow = React.useRef<Window | null>(null);
 
   React.useEffect(() => () => pending.forEach((p) => URL.revokeObjectURL(p.preview)), [pending]);
+
+  // Preload Google sign-in so its pop-up opens straight from the click (not blocked); stop any import on unmount.
+  React.useEffect(() => {
+    if (isGooglePhotosConfigured) loadGoogleIdentity().catch(() => {});
+    return () => gpAbort.current?.abort();
+  }, []);
 
   const addDestination = (d: DestinationInput) => {
     if (destinations.some((x) => destinationKey(x) === destinationKey(d))) {
@@ -75,10 +101,9 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
       return next;
     });
 
-  const onFiles = (files: FileList | null) => {
-    if (!files) return;
-    const room = MAX_PHOTOS_PER_TRIP - photos.length - pending.length;
-    const list = Array.from(files);
+  const room = MAX_PHOTOS_PER_TRIP - photos.length - pending.length;
+
+  const addFiles = (list: File[]) => {
     if (list.length > room) toast.error(`You can add up to ${MAX_PHOTOS_PER_TRIP} photos per trip`);
     const accepted: PendingPhoto[] = [];
     for (const f of list.slice(0, Math.max(0, room))) {
@@ -87,7 +112,56 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
       else accepted.push({ id: `${f.name}-${f.size}-${f.lastModified}`, file: f, preview: URL.createObjectURL(f) });
     }
     setPending((p) => [...p, ...accepted]);
+    return accepted.length;
+  };
+
+  const onFiles = (files: FileList | null) => {
+    if (files) addFiles(Array.from(files));
     if (fileRef.current) fileRef.current.value = "";
+  };
+
+  /** Point the picker window at Google's picker; returns false if the browser blocked the pop-up. */
+  const openPicker = (uri: string) => {
+    const existing = gpWindow.current && !gpWindow.current.closed ? gpWindow.current : null;
+    if (existing) existing.location.href = uri;
+    gpWindow.current = existing ?? window.open(uri, PICKER_WINDOW, PICKER_FEATURES);
+    return !!gpWindow.current;
+  };
+
+  const cancelGooglePhotos = () => {
+    gpAbort.current?.abort();
+    gpWindow.current?.close();
+  };
+
+  const importFromGooglePhotos = async () => {
+    if (room <= 0 || gp.status !== "idle") return;
+    // With a token already in hand, open the window now (inside the click) so pop-up blockers allow it.
+    gpWindow.current = hasValidGoogleToken() ? window.open("", PICKER_WINDOW, PICKER_FEATURES) : null;
+    const ac = new AbortController();
+    gpAbort.current = ac;
+    setGp({ status: "auth" });
+    try {
+      const token = await getGooglePhotosToken();
+      setGp({ status: "picking" });
+      const { files, failed } = await pickFromGooglePhotos({
+        token,
+        max: room,
+        signal: ac.signal,
+        onPickerReady: (uri) => setGp({ status: "picking", pickerUri: uri, blocked: !openPicker(uri) }),
+        onDownloading: (count) => setGp({ status: "downloading", count }),
+      });
+      const added = addFiles(files);
+      if (failed) toast.error(`${failed} photo${failed > 1 ? "s" : ""} couldn't be imported from Google Photos`);
+      if (added) toast.success(`Added ${added} photo${added > 1 ? "s" : ""} from Google Photos`);
+      else if (!files.length && !failed) toast("No photos were picked");
+    } catch (e) {
+      if (!(e instanceof GooglePhotosCancelled)) toast.error(errorMessage(e));
+      gpWindow.current?.close();
+    } finally {
+      gpWindow.current = null;
+      if (gpAbort.current === ac) gpAbort.current = null;
+      setGp({ status: "idle" });
+    }
   };
 
   const removeExisting = async (p: Photo) => {
@@ -262,13 +336,43 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
               </button>
             </div>
           ))}
-          {photos.length + pending.length < MAX_PHOTOS_PER_TRIP && (
-            <button type="button" onClick={() => fileRef.current?.click()} className="flex aspect-square flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-navy-900/15 text-muted transition hover:border-sunset-400 hover:text-sunset-600">
+          {room > 0 && (
+            <button type="button" onClick={() => fileRef.current?.click()} disabled={gp.status !== "idle"} className={addTileClass}>
               {photos.length + pending.length === 0 ? <Camera className="size-6" /> : <ImagePlus className="size-6" />}
-              <span className="text-xs font-semibold">Add photos</span>
+              <span className="text-xs font-semibold">{isGooglePhotosConfigured ? "From device" : "Add photos"}</span>
+            </button>
+          )}
+          {room > 0 && isGooglePhotosConfigured && (
+            <button type="button" onClick={importFromGooglePhotos} disabled={gp.status !== "idle"} className={addTileClass}>
+              {gp.status === "idle" ? <Images className="size-6" /> : <Loader2 className="size-6 animate-spin" />}
+              <span className="text-xs font-semibold">Google Photos</span>
             </button>
           )}
         </div>
+        {gp.status !== "idle" && (
+          <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-cream-100 px-3 py-2.5 text-sm" role="status">
+            <Loader2 className="size-4 shrink-0 animate-spin text-sunset-600" />
+            <span className="min-w-0 flex-1">
+              {gp.status === "auth"
+                ? "Connecting to Google Photos…"
+                : gp.status === "downloading"
+                  ? `Importing ${gp.count} photo${gp.count === 1 ? "" : "s"}…`
+                  : gp.blocked
+                    ? "Ready — open Google Photos to choose your pictures."
+                    : `Pick up to ${room} photo${room === 1 ? "" : "s"} in the Google Photos window, then tap Done.`}
+            </span>
+            {gp.status === "picking" && gp.pickerUri && (
+              <Button type="button" size="sm" variant={gp.blocked ? "primary" : "ghost"} onClick={() => openPicker(gp.pickerUri!)}>
+                <ExternalLink className="size-3.5" /> {gp.blocked ? "Open Google Photos" : "Reopen"}
+              </Button>
+            )}
+            {gp.status !== "downloading" && (
+              <Button type="button" size="sm" variant="ghost" onClick={cancelGooglePhotos}>
+                Cancel
+              </Button>
+            )}
+          </div>
+        )}
         <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple hidden onChange={(e) => onFiles(e.target.files)} />
 
         <Field label="Most memorable moment" htmlFor="mem" error={errors.memorable}>
@@ -289,7 +393,7 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
             <MapPin className="mr-1 inline size-4" />
             {destinations.length ? `${destinations.length} stop${destinations.length > 1 ? "s" : ""}` : "No stops yet"}
           </div>
-          <Button type="submit" size="lg" loading={saving} className="w-full sm:w-auto">
+          <Button type="submit" size="lg" loading={saving} disabled={gp.status !== "idle"} className="w-full sm:w-auto">
             {saving ? (pending.length ? "Saving & uploading…" : "Saving…") : initial ? "Save changes" : "Add trip"}
           </Button>
         </div>
@@ -297,6 +401,9 @@ export function TripForm({ initial, onSaved }: { initial?: Trip; onSaved: (t: Tr
     </form>
   );
 }
+
+const addTileClass =
+  "flex aspect-square flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-navy-900/15 px-2 text-center text-muted transition hover:border-sunset-400 hover:text-sunset-600 disabled:pointer-events-none disabled:opacity-60";
 
 function IconBtn({ children, label, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { label: string }) {
   return (

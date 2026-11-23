@@ -25,6 +25,7 @@ Data lives in `localStorage` on that device only. A banner makes this explicit.
 4. Sign-in is **Google only** in Supabase mode. In Google Cloud Console create an OAuth client (Web application) with the authorized redirect URI `https://YOUR-PROJECT.supabase.co/auth/v1/callback`, then paste its Client ID and secret into Supabase → Authentication → Sign In / Providers → Google. (Local mode, without Supabase, keeps an email/password form for demos.)
 5. Optional: `RESEND_API_KEY` + `INVITE_FROM_EMAIL` (a verified domain) for server-sent invitations.
 6. Optional: `SUPABASE_SERVICE_ROLE_KEY` + `ADMIN_EMAILS` for `/admin` analytics.
+7. Optional — **import trip photos from Google Photos**: in Google Cloud Console enable the **Google Photos Picker API**, add the scope `https://www.googleapis.com/auth/photospicker.mediaitems.readonly` to the OAuth consent screen, and on a *Web application* OAuth client (the sign-in one works) add your site (e.g. `http://localhost:3000`, `https://YOUR-DOMAIN`) under **Authorized JavaScript origins**. Set its client ID as `NEXT_PUBLIC_GOOGLE_CLIENT_ID`. The trip form then shows a "Google Photos" tile next to "From device"; users pick photos in Google's own picker and only those photos are shared with the app. Works in local mode too.
 
 ## Deploy (Vercel)
 
