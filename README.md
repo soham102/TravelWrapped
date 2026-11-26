@@ -1,67 +1,68 @@
-# Travel Wrapped — Your year in journeys
+# Travel Wrapped 🌍✈️
 
-Spotify-Wrapped-style recaps for travel. Users log their trips, and the app turns them into an
-interactive 10-slide story, an accurate India map, and downloadable/shareable images.
+**Link:** https://travelwrap-iota.vercel.app/
 
-> Built by Soham for the goSTOPS Build Sprint. Not an official goSTOPS product.
+Travel Wrapped is a personalised travel storytelling platform designed to help people turn their travel history into beautiful, engaging and shareable experiences.
 
-## Quick start
+Inspired by the concept of Spotify Wrapped, the platform transforms travel details such as destinations, trips, travel dates and companions into a personalised year-in-travel experience.
 
-```bash
-npm install
-cp .env.example .env.local   # optional — without Supabase the app runs in local mode
-npm run dev
-```
+It brings together travel statistics, destination highlights, interactive maps, travel personalities and achievements to help users revisit their journeys and discover interesting insights about their travel habits.
 
-**Local mode** (no env vars): everything works in the browser — accounts, trips, photos, Wrapped,
-exports, share links (snapshot encoded in the URL hash), invitations via `mailto:`, and local analytics.
-Data lives in `localStorage` on that device only. A banner makes this explicit.
+The platform aims to turn scattered travel memories into a story worth sharing, making it easier for people to celebrate their adventures and inspire others to explore.
 
-**Supabase mode**: set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`, then:
+## ✨ Features
 
-1. Create a Supabase project (free tier is fine).
-2. SQL editor → run `supabase/migrations/0001_init.sql` (tables, constraints, RLS, storage bucket + policies, triggers, RPCs), then `0002_api_grants.sql` (table privileges for the API roles — newer Supabase projects no longer grant these automatically).
-3. Auth → URL configuration: set the Site URL and add `https://YOUR-DOMAIN/**` to redirect URLs (used by email confirmation, password reset and Google OAuth).
-4. Sign-in is **Google only** in Supabase mode. In Google Cloud Console create an OAuth client (Web application) with the authorized redirect URI `https://YOUR-PROJECT.supabase.co/auth/v1/callback`, then paste its Client ID and secret into Supabase → Authentication → Sign In / Providers → Google. (Local mode, without Supabase, keeps an email/password form for demos.)
-5. Optional: `RESEND_API_KEY` + `INVITE_FROM_EMAIL` (a verified domain) for server-sent invitations.
-6. Optional: `SUPABASE_SERVICE_ROLE_KEY` + `ADMIN_EMAILS` for `/admin` analytics.
-7. Optional — **import trip photos from Google Photos**: in Google Cloud Console enable the **Google Photos Picker API**, add the scope `https://www.googleapis.com/auth/photospicker.mediaitems.readonly` to the OAuth consent screen, and on a *Web application* OAuth client (the sign-in one works) add your site (e.g. `http://localhost:3000`, `https://YOUR-DOMAIN`) under **Authorized JavaScript origins**. Set its client ID as `NEXT_PUBLIC_GOOGLE_CLIENT_ID`. The trip form then shows a "Google Photos" tile next to "From device"; users pick photos in Google's own picker and only those photos are shared with the app. Works in local mode too.
+- ✈️ **Personalised Travel Wrapped:** Transform your travel history into a personalised year-in-travel experience.
+- 📊 **Travel Statistics:** Discover the number of trips, cities, countries and travel days from your travel history.
+- 🗺️ **Interactive Travel Map:** Visualise the destinations you have explored and see your journeys come together on a map.
+- 💫 **Travel Personality:** Discover your travel personality based on your travel patterns, destinations and experiences.
+- 🏆 **Travel Achievements:** Unlock personalised milestones and achievements based on your journeys.
+- 🧑‍🤝‍🧑 **Travel Companion Insights:** Explore whether you travelled mostly solo, with friends, family or others.
+- 📸 **Shareable Travel Stories:** Generate visually engaging travel cards that can be downloaded and shared on social media.
+- 🎬 **Travel Wrapped Video:** Turn your travel history into a personalised visual storytelling experience.
+- 🌍 **Multiple Trips and Destinations:** Bring together different journeys and destinations into one personalised travel recap.
 
-## Deploy (Vercel)
+## 🎯 Why Travel Wrapped?
 
-Import the repo, add the env vars from `.env.example` (set `NEXT_PUBLIC_SITE_URL` to the production URL), deploy.
-No extra config is needed.
+People travel, explore new places and create countless memories throughout the year.
 
-## Architecture
+However, most of these memories remain scattered across phone galleries, social media posts and personal photo collections. Unlike music, fitness or food consumption, travel often lacks a simple way to revisit and visualise an entire year of experiences.
 
-| Layer | Choice |
-|---|---|
-| App | Next.js 16 (App Router, Cache Components), TypeScript, Tailwind v4 |
-| Data access | Browser → Supabase directly, protected by RLS (`lib/store/supabase-store.ts`); same `Store` interface backed by localStorage in local mode (`lib/store/local-store.ts`) |
-| Server routes | `/api/invite` (Resend or mailto fallback + rate limit), `/api/geocode` (Photon/OSM proxy + cache), `/api/admin/metrics` (service role, admin-gated) |
-| Public pages | `/w/[slug]` server-rendered via the `get_public_wrapped` security-definer RPC + dynamic OG image |
-| Wrapped engine | `lib/wrapped/compute.ts` (stats, achievements), `lib/wrapped/personality.ts` (rule-based, with reasons) — pure functions over real trips |
-| Maps | d3-geo SVG map from DataMeet state boundaries (`lib/geo/india-states.json`, 36 states/UTs) for stories & exports; React-Leaflet for the zoomable map page |
-| Exports | html-to-image (PNG @3×: 1080×1920 / 1080×1080 / 1200×1680) + jsPDF (complete Wrapped) from an offscreen native-size render stage |
-| Sharing | Web Share API with image files (→ Instagram/WhatsApp on mobile), WhatsApp/LinkedIn/Facebook/X intents, copy link, opt-in & revocable public links |
+Platforms like Spotify have demonstrated how personal data can be transformed into engaging stories that people genuinely enjoy sharing.
 
-### Data model (see migration for full DDL)
+Travel Wrapped brings that idea to travel.
 
-`profiles` (1:1 auth.users, referral_code, referred_by) · `trips` · `destinations` (ordered stops, unique per trip) ·
-`travel_photos` (private bucket `travel-photos/<uid>/<trip>/…`) · `travel_wrapped` (one per user/year, public-safe `stats` snapshot, `public_slug`, `is_public`) ·
-`invitations` (unique per sender+email, 25/day trigger) · `events` (insert-only analytics).
+Instead of simply storing travel memories, the platform helps users discover how much they travelled, which destinations they explored, who they travelled with and what kind of traveller they are.
 
-### Privacy
+It is designed for Gen Z, solo travellers, weekend explorers, backpackers, students and anyone who enjoys discovering new places.
 
-- RLS: every table is owner-only. Public Wrapped are readable only through a slug-scoped RPC (no enumeration).
-- Public snapshots exclude photos, notes and memorable moments.
-- Photos are resized and re-encoded client-side (strips EXIF/GPS) and served via short-lived signed URLs.
+Users can create their Travel Wrapped using their travel details, without making photo uploads mandatory.
 
-### Honest numbers
+**The goal is simple: turn your travel history into a story worth revisiting and sharing.**
 
-Distance appears only when the user logs km. Personality and achievements are rule-based on actual trips,
-and the personality slide shows *why*. Landing page shows no invented user counts or testimonials.
+## 🛠️ Technology
 
-## Scripts
+Travel Wrapped is developed as a web-based travel storytelling application.
 
-`npm run dev` · `npm run build` · `npm start` · `npm run lint`
+The technology stack includes:
+
+- **Next.js / React** — application interface and user experience
+- **TypeScript** — type-safe application development
+- **Tailwind CSS** — responsive UI and styling
+- **Supabase** — database, authentication and backend services
+- **Maps and Geolocation** — destination visualisation and travel journeys
+- **Vercel** — deployment and hosting
+
+*The implementation uses the technologies and integrations available in the current application.*
+
+## 🚀 Vision
+
+To make travel memories more meaningful, discoverable and shareable by transforming everyday journeys into personalised stories.
+
+Travel Wrapped aims to become a fun way for people to revisit their travel experiences, discover their travel identity and inspire others to explore new destinations.
+
+**Your journeys. Your memories. Your year.**
+
+**Explore Travel Wrapped:** https://travelwrap-iota.vercel.app/
+
+*Travel Wrapped is an independent project built by Soham for the goSTOPS Build Sprint. It is not an official goSTOPS product.*
